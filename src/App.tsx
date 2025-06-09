@@ -17,6 +17,7 @@ import {
 
 import { api } from "./services/api";
 import { AnimatePresence } from "motion/react";
+import { RxListBullet } from "react-icons/rx";
 
 export const App = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
@@ -47,9 +48,27 @@ export const App = () => {
             </Card>
           </div>
         ) : (
-          <div className="flex h-full">
+          <div className="flex flex-col gap-3 h-full">
             {folders.map((folder) => (
-              <Card key={folder.id}>{folder.title}</Card>
+              <Card key={folder.id} className="cursor-pointer">
+                <h1 className="font-bold text-lg text-gray-700">
+                  {folder.title}
+                </h1>
+
+                {folder.description && (
+                  <h2 className="font-normal text-sm text-gray-500">
+                    {folder.description}
+                  </h2>
+                )}
+
+                <div className="flex items-center gap-1">
+                  <RxListBullet color="#667085" />
+                  <span className="font-normal text-sm text-gray-500">
+                    {folder.items.filter((item) => item.checked).length}/
+                    {folder.items.length} itens completos
+                  </span>
+                </div>
+              </Card>
             ))}
           </div>
         )}
@@ -78,6 +97,8 @@ const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
   });
 
   const onSubmit = async (data: AddFolderFormData) => {
+    if (isFetching) return;
+
     try {
       setIsFetching(true);
 
