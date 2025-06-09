@@ -1,11 +1,16 @@
+import { useState } from "react";
+
 import { Card } from "./components/Card";
 import { useFolderContext } from "./context/FolderContext";
-
-import noData from "./assets/svg/no-data.svg";
 import { Button } from "./components/Button";
 import { Modal } from "./components/Modal";
 
-function App() {
+import noData from "./assets/svg/no-data.svg";
+import { Input } from "./components/Input";
+
+export const App = () => {
+  const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
+
   const { folders } = useFolderContext();
 
   return (
@@ -17,7 +22,7 @@ function App() {
               <img src={noData} alt="" width={300} />
 
               <div className="text-center">
-                <h1 className="text-xl font-semibold text-gray-900">
+                <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
                   Comece criando uma pasta
                 </h1>
                 <h2 className="text-sm font-medium text-gray-500">
@@ -26,7 +31,9 @@ function App() {
                 </h2>
               </div>
 
-              <Button>Adicionar nova pasta</Button>
+              <Button onClick={() => setAddFolderModal(true)}>
+                Adicionar nova pasta
+              </Button>
             </Card>
           </div>
         ) : (
@@ -36,14 +43,23 @@ function App() {
             ))}
           </div>
         )}
-
-        <Modal
-          title="Adicionar nova pasta"
-          onClose={() => console.log()}
-        ></Modal>
       </div>
+
+      {addFolderModal && (
+        <AddFolderForm onClose={() => setAddFolderModal(false)} />
+      )}
     </main>
   );
-}
+};
 
-export default App;
+const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <Modal title="Adicionar nova pasta" onClose={onClose}>
+      <form className="flex flex-col gap-3">
+        <Input label="Nome da pasta" placeholder="-" />
+        <Input label="Descrição da pasta" placeholder="-" />
+        <Button>Criar</Button>
+      </form>
+    </Modal>
+  );
+};

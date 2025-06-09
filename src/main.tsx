@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 
 import { FolderProvider } from "./context/FolderContext.tsx";
 
-import App from "./App.tsx";
+import { App } from "./App.tsx";
 
 import "./global.css";
 

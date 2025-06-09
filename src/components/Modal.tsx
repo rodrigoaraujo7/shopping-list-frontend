@@ -14,8 +14,11 @@ export const Modal = ({ title, onClose, ...props }: ModalProps) => {
         className="bg-white p-6 w-fit h-fit max-w-full rounded-4xl md:min-w-[425px] md:max-w-[768px]"
         {...props}
       >
-        <header className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-700">{title}</h1>
+        <header className="flex items-center justify-between gap-4 mb-3">
+          <h1 className=" text-lg md:text-2xl font-bold text-gray-700 text-ellipsis overflow-hidden whitespace-nowrap">
+            {title}
+          </h1>
+
           <Avatar onClick={onClose}>
             <RxCross2 color="#7f56d9" />
           </Avatar>
