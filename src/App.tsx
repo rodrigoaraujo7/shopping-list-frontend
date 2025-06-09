@@ -4,9 +4,18 @@ import { Card } from "./components/Card";
 import { useFolderContext } from "./context/FolderContext";
 import { Button } from "./components/Button";
 import { Modal } from "./components/Modal";
+import { Input } from "./components/Input";
 
 import noData from "./assets/svg/no-data.svg";
-import { Input } from "./components/Input";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  type AddFolderFormData,
+  AddFolderFormSchema,
+} from "./types/zod/add-folder-form";
+
+import { api } from "./services/api";
 
 export const App = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
@@ -53,11 +62,49 @@ export const App = () => {
 };
 
 const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
+  const { setFolders } = useFolderContext();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddFolderFormData>({
+    resolver: zodResolver(AddFolderFormSchema),
+  });
+
+  const onSubmit = async (data: AddFolderFormData) => {
+    try {
+      const response = await api.post("/folder", {
+        title: data.title,
+        description: data.description,
+      });
+
+      setFolders((folder) => [...folder, response.data]);
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Modal title="Adicionar nova pasta" onClose={onClose}>
-      <form className="flex flex-col gap-3">
-        <Input label="Nome da pasta" placeholder="-" />
-        <Input label="Descrição da pasta" placeholder="-" />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+        <Input
+          id="name"
+          label="Nome da pasta"
+          placeholder="-"
+          {...register("title")}
+          styles={errors.title && "error"}
+        />
+
+        <Input
+          id="description"
+          label="Descrição da pasta"
+          placeholder="-"
+          {...register("description")}
+        />
+
         <Button>Criar</Button>
       </form>
     </Modal>
