@@ -54,7 +54,7 @@ export const App = () => {
         )}
       </div>
 
-      {addFolderModal && (
+      {!addFolderModal && (
         <AddFolderForm onClose={() => setAddFolderModal(false)} />
       )}
     </main>
@@ -62,6 +62,8 @@ export const App = () => {
 };
 
 const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+
   const { setFolders } = useFolderContext();
 
   const {
@@ -74,6 +76,8 @@ const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
 
   const onSubmit = async (data: AddFolderFormData) => {
     try {
+      setIsFetching(true);
+
       const response = await api.post("/folder", {
         title: data.title,
         description: data.description,
@@ -84,6 +88,8 @@ const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
       onClose();
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -105,7 +111,7 @@ const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
           {...register("description")}
         />
 
-        <Button>Criar</Button>
+        <Button isFetching={isFetching}>Criar</Button>
       </form>
     </Modal>
   );
