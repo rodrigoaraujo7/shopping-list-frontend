@@ -1,6 +1,11 @@
 import { Card } from "./components/Card";
+import { useFolderContext } from "./context/FolderContext";
 
 function App() {
+  const { folders } = useFolderContext();
+
+  console.log(folders);
+
   return (
     <main className="min-h-screen grid grid-cols-[1fr] md:grid-cols-[1fr_768px_1fr]">
       <div className="col-auto p-4 md:col-start-2 md:col-end-3">
