@@ -1,4 +1,5 @@
 import { useRef, type ComponentProps } from "react";
+import { motion } from "motion/react";
 import { Avatar } from "./Avatar";
 import { RxCross2 } from "react-icons/rx";
 
@@ -17,9 +18,12 @@ export const Modal = ({ title, onClose, ...props }: ModalProps) => {
   };
 
   return (
-    <div
+    <motion.div
       className="fixed inset-0 p-4 flex justify-center items-center bg-[#00000090]"
       onClick={handleClickOutside}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
     >
       <div
         className="bg-white p-6 w-fit h-fit max-w-full rounded-4xl md:min-w-[425px] md:max-w-[768px]"
@@ -38,6 +42,6 @@ export const Modal = ({ title, onClose, ...props }: ModalProps) => {
 
         {props.children}
       </div>
-    </div>
+    </motion.div>
   );
 };

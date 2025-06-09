@@ -16,6 +16,7 @@ import {
 } from "./types/zod/add-folder-form";
 
 import { api } from "./services/api";
+import { AnimatePresence } from "motion/react";
 
 export const App = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
@@ -54,9 +55,11 @@ export const App = () => {
         )}
       </div>
 
-      {!addFolderModal && (
-        <AddFolderForm onClose={() => setAddFolderModal(false)} />
-      )}
+      <AnimatePresence mode="wait">
+        {addFolderModal && (
+          <AddFolderForm onClose={() => setAddFolderModal(false)} />
+        )}
+      </AnimatePresence>
     </main>
   );
 };
