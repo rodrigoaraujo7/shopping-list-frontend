@@ -20,3 +20,7 @@
   --color-primary-600: #7f56d9;
   --color-primary-900: #42307d;
 }
+
+* {
+  font-family: "Inter", sans-serif;
+}
