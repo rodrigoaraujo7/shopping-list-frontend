@@ -107,7 +107,7 @@ const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
         description: data.description,
       });
 
-      setFolders((folder) => [...folder, response.data]);
+      setFolders((folder) => [...folder, { ...response.data, items: [] }]);
 
       onClose();
     } catch (error) {
