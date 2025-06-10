@@ -7,7 +7,12 @@ import { Avatar } from "../components/Avatar";
 import { Card } from "../components/Card";
 import { Button } from "../components/Button";
 
-import { RxArrowLeft, RxDotsVertical } from "react-icons/rx";
+import {
+  RxArrowLeft,
+  RxDotsVertical,
+  RxListBullet,
+  RxExternalLink,
+} from "react-icons/rx";
 import { CgSpinner } from "react-icons/cg";
 
 import noFolderRoute from "../assets/svg/no-folder-route.svg";
@@ -45,7 +50,77 @@ export const FolderPage = () => {
                 </Avatar>
               </header>
 
-              <h1>{folder?.title}</h1>
+              <h1 className="font-bold text-2xl text-gray-700">
+                {folder.title}
+              </h1>
+
+              {folder.description && (
+                <h2 className="font-medium text-sm text-gray-500">
+                  {folder.description}
+                </h2>
+              )}
+
+              <div className="flex items-center gap-1">
+                <RxListBullet color="#667085" />
+                <span className="font-normal text-sm text-gray-500">
+                  {folder.items.filter((item) => item.checked).length}/
+                  {folder.items.length} itens completos
+                </span>
+              </div>
+
+              {folder.items.length >= 1 ? (
+                <React.Fragment>
+                  <div className="flex flex-col gap-3">
+                    {folder.items.map((item) => (
+                      <Card styles="soft" key={item.id}>
+                        <div className="flex gap-2 items-center justify-between w-full">
+                          <div className="flex items-center gap-2 w-[90%]">
+                            <input
+                              type="checkbox"
+                              id={`checkbox-${item.id}`}
+                              checked={item.checked}
+                              onChange={() => console.log("check")}
+                              className=" relative peer shrink-0 appearance-none w-4 h-4 border-[1px] border-gray-300 rounded-sm bg-white checked:bg-primary-50 checked:border-primary-600"
+                            />
+                            <label
+                              htmlFor={`checkbox-${item.id}`}
+                              className="font-normal text-sm text-gray-700 text-ellipsis overflow-hidden whitespace-nowrap"
+                            >
+                              Checked state
+                            </label>
+                            <svg
+                              className="absolute w-3 h-3 ml-[2px] hidden peer-checked:block pointer-events-none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="#7f56d9"
+                              strokeWidth="4"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+
+                          {item.link && (
+                            <span>
+                              <RxExternalLink
+                                size={16}
+                                strokeWidth=".5"
+                                color="#667085"
+                              />
+                            </span>
+                          )}
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <Button>Adicionar novo item</Button>
+                </React.Fragment>
+              ) : (
+                <h1>lista vazia</h1>
+              )}
             </div>
           ) : (
             <div className="flex justify-center items-center h-full">

@@ -12,6 +12,7 @@ export interface Item {
   name: string;
   checked: boolean;
   folderId: string;
+  link?: string;
   created_at: string;
   updated_at: string;
 }
