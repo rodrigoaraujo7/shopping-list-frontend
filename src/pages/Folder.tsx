@@ -72,7 +72,11 @@ export const FolderPage = () => {
                 <React.Fragment>
                   <div className="flex flex-col gap-3">
                     {folder.items.map((item) => (
-                      <Card styles="soft" key={item.id}>
+                      <Card
+                        styles={item.checked ? "colored" : "soft"}
+                        key={item.id}
+                        data-checked={item.checked}
+                      >
                         <div className="flex gap-2 items-center justify-between w-full">
                           <div className="flex items-center gap-2 w-[90%]">
                             <input
@@ -84,7 +88,11 @@ export const FolderPage = () => {
                             />
                             <label
                               htmlFor={`checkbox-${item.id}`}
-                              className="font-normal text-sm text-gray-700 text-ellipsis overflow-hidden whitespace-nowrap"
+                              className={`font-normal text-sm text-gray-700 text-ellipsis overflow-hidden whitespace-nowrap ${
+                                item.checked
+                                  ? "line-through text-primary-600"
+                                  : ""
+                              }`}
                             >
                               Checked state
                             </label>
@@ -107,7 +115,7 @@ export const FolderPage = () => {
                               <RxExternalLink
                                 size={16}
                                 strokeWidth=".5"
-                                color="#667085"
+                                color={item.checked ? "#7f56d9" : "#667085"}
                               />
                             </span>
                           )}

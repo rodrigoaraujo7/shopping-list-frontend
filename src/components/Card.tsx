@@ -6,6 +6,7 @@ const card = tv({
   variants: {
     styles: {
       soft: "bg-gray-25 rounded-xl border-[1px] border-gray-200 gap-2",
+      colored: "bg-primary-50 rounded-xl border-[1px] border-primary-300 gap-2",
       outline:
         "bg-white rounded-3xl border-[1px] border-gray-200 border-dashed gap-4",
     },
