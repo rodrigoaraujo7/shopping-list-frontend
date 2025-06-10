@@ -20,7 +20,7 @@ const FolderContext = createContext<FolderContextProps | undefined>(undefined);
 
 export const FolderProvider = ({ children }: { children: ReactNode }) => {
   const [folders, setFolders] = useState<Folder[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchFolders = async () => {
     try {
