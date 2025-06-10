@@ -1,12 +1,17 @@
 import { useState } from "react";
 
+import { AnimatePresence } from "motion/react";
+
 import { Card } from "./components/Card";
 import { useFolderContext } from "./context/FolderContext";
 import { Button } from "./components/Button";
 import { Modal } from "./components/Modal";
 import { Input } from "./components/Input";
+import { Avatar } from "./components/Avatar";
 
 import noData from "./assets/svg/no-data.svg";
+
+import { RxListBullet, RxPlus } from "react-icons/rx";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,8 +21,6 @@ import {
 } from "./types/zod/add-folder-form";
 
 import { api } from "./services/api";
-import { AnimatePresence } from "motion/react";
-import { RxListBullet } from "react-icons/rx";
 
 export const App = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
@@ -26,7 +29,7 @@ export const App = () => {
 
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-[1fr_768px_1fr]">
-      <div className="col-auto p-4 md:col-start-2 md:col-end-3">
+      <div className="col-auto p-4 relative md:col-start-2 md:col-end-3">
         {folders.length <= 0 ? (
           <div className="flex justify-center items-center h-full">
             <Card styles="outline" flex="center" style={{ width: "360px" }}>
@@ -71,6 +74,15 @@ export const App = () => {
               </Card>
             ))}
           </div>
+        )}
+
+        {folders.length >= 1 && (
+          <Avatar
+            style={{ position: "absolute", right: 16, bottom: 32, padding: 16 }}
+            onClick={() => setAddFolderModal(true)}
+          >
+            <RxPlus color="#7f56d9" size={24} />
+          </Avatar>
         )}
       </div>
 
