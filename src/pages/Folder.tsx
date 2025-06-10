@@ -19,10 +19,12 @@ import noFolderRoute from "../assets/svg/no-folder-route.svg";
 
 import { useFolderContext } from "../context/FolderContext";
 
-import type { Folder } from "../types/Folder";
+import { api } from "../services/api";
+
+import type { Folder, Item } from "../types/Folder";
 
 export const FolderPage = () => {
-  const { folders, loading } = useFolderContext();
+  const { folders, setFolders, loading } = useFolderContext();
   const { folderId } = useParams();
 
   const folder: Folder | undefined = folders.find(
@@ -30,6 +32,34 @@ export const FolderPage = () => {
   );
 
   const navigate = useNavigate();
+
+  const handleCheckItemList = async (item: Item) => {
+    try {
+      const updatedItem = {
+        ...item,
+        checked: !item.checked,
+      };
+
+      setFolders((prevFolders) =>
+        prevFolders.map((folder) =>
+          folder.id === folderId
+            ? {
+                ...folder,
+                items: folder.items.map((i) =>
+                  i.id === item.id ? updatedItem : i
+                ),
+              }
+            : folder
+        )
+      );
+
+      await api.put(`item`, updatedItem, {
+        params: { id: item.id },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <MainGrid>
@@ -83,7 +113,7 @@ export const FolderPage = () => {
                               type="checkbox"
                               id={`checkbox-${item.id}`}
                               checked={item.checked}
-                              onChange={() => console.log("check")}
+                              onChange={() => handleCheckItemList(item)}
                               className=" relative peer shrink-0 appearance-none w-4 h-4 border-[1px] border-gray-300 rounded-sm bg-white checked:bg-primary-50 checked:border-primary-600"
                             />
                             <label
@@ -111,13 +141,13 @@ export const FolderPage = () => {
                           </div>
 
                           {item.link && (
-                            <span>
+                            <a href={item.link} target="_blank">
                               <RxExternalLink
                                 size={16}
                                 strokeWidth=".5"
                                 color={item.checked ? "#7f56d9" : "#667085"}
                               />
-                            </span>
+                            </a>
                           )}
                         </div>
                       </Card>
