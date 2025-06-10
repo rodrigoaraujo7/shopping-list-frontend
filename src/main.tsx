@@ -4,8 +4,9 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 
 import { FolderProvider } from "./context/FolderContext.tsx";
+import { FolderPage } from "./pages/Folder.tsx";
 
-import { App } from "./App.tsx";
+import { App } from "./pages/App.tsx";
 
 import "./global.css";
 
@@ -15,6 +16,9 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Routes>
           <Route index element={<App />} />
+
+          <Route path="/folder/:folderId" element={<FolderPage />} />
+
           <Route path="*" element={<h1>Página não encontrada</h1>} />
         </Routes>
       </BrowserRouter>
