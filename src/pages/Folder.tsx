@@ -16,6 +16,7 @@ import {
 import { CgSpinner } from "react-icons/cg";
 
 import noFolderRoute from "../assets/svg/no-folder-route.svg";
+import noItems from "../assets/svg/no-items.svg";
 
 import { useFolderContext } from "../context/FolderContext";
 
@@ -70,7 +71,7 @@ export const FolderPage = () => {
       ) : (
         <React.Fragment>
           {folder ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 h-full">
               <header className="flex justify-between gap-4">
                 <Avatar onClick={() => navigate("../")}>
                   <RxArrowLeft color="#7f56d9" size={16} strokeWidth=".75" />
@@ -114,11 +115,11 @@ export const FolderPage = () => {
                               id={`checkbox-${item.id}`}
                               checked={item.checked}
                               onChange={() => handleCheckItemList(item)}
-                              className=" relative peer shrink-0 appearance-none w-4 h-4 border-[1px] border-gray-300 rounded-sm bg-white checked:bg-primary-50 checked:border-primary-600"
+                              className=" relative peer shrink-0 appearance-none w-4 h-4 border-[1px] border-gray-300 rounded-sm bg-white checked:bg-primary-50 checked:border-primary-600 transition-[.15s]"
                             />
                             <label
                               htmlFor={`checkbox-${item.id}`}
-                              className={`font-normal text-sm text-gray-700 text-ellipsis overflow-hidden whitespace-nowrap ${
+                              className={`font-normal text-sm text-gray-700 text-ellipsis overflow-hidden whitespace-nowrap transition-[.15s] ${
                                 item.checked
                                   ? "line-through text-primary-600"
                                   : ""
@@ -157,7 +158,23 @@ export const FolderPage = () => {
                   <Button>Adicionar novo item</Button>
                 </React.Fragment>
               ) : (
-                <h1>lista vazia</h1>
+                <div className="h-full flex items-center justify-center">
+                  <div className="flex flex-col gap-4 w-[360px]">
+                    <img src={noItems} alt="" width={300} />
+
+                    <div className="text-center">
+                      <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
+                        Adicione items para sua lista
+                      </h1>
+                      <h2 className="text-sm font-medium text-gray-500">
+                        Sua lista de compras inteligente será exibida aqui.
+                        Comece criando um novo item
+                      </h2>
+                    </div>
+
+                    <Button>Adicionar novo item</Button>
+                  </div>
+                </div>
               )}
             </div>
           ) : (

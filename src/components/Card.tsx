@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const card = tv({
-  base: "w-full h-fit p-6 flex flex-col",
+  base: "w-full h-fit p-6 flex flex-col transition-[.15s]",
   variants: {
     styles: {
       soft: "bg-gray-25 rounded-xl border-[1px] border-gray-200 gap-2",

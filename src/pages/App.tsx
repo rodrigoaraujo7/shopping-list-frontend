@@ -44,7 +44,7 @@ export const App = () => {
           {folders.length <= 0 ? (
             <div className="flex justify-center items-center h-full">
               <Card styles="outline" flex="center" style={{ width: "360px" }}>
-                <img src={noData} alt="" width={300} />
+                <img src={noData} alt="no-data" width={300} />
 
                 <div className="text-center">
                   <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
