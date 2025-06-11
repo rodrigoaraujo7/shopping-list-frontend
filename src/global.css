@@ -25,6 +25,19 @@
 
 * {
   font-family: "Inter", sans-serif;
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #d0d5dd;
+    border-radius: 10px;
+  }
 }
 
 button {

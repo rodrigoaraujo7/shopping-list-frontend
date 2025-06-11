@@ -121,7 +121,7 @@ export const FolderPage = () => {
 
               {folder.items.length >= 1 ? (
                 <React.Fragment>
-                  <div className="flex flex-col gap-3 flex-[1] overflow-auto">
+                  <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
                     {folder.items.map((item) => (
                       <Card
                         styles={item.checked ? "colored" : "soft"}

@@ -62,7 +62,7 @@ export const App = () => {
               </Card>
             </div>
           ) : (
-            <div className="flex flex-col gap-3 h-full overflow-auto">
+            <div className="flex flex-col gap-3 h-full pr-1 overflow-auto">
               {folders.map((folder) => (
                 <Card
                   key={folder.id}
