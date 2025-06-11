@@ -62,7 +62,7 @@ export const App = () => {
               </Card>
             </div>
           ) : (
-            <div className="flex flex-col gap-3 h-full">
+            <div className="flex flex-col gap-3 h-full overflow-auto">
               {folders.map((folder) => (
                 <Card
                   key={folder.id}
@@ -94,7 +94,7 @@ export const App = () => {
           {folders.length >= 1 && (
             <Avatar
               style={{
-                position: "absolute",
+                position: "fixed",
                 right: 16,
                 bottom: 32,
                 padding: 16,

@@ -121,7 +121,7 @@ export const FolderPage = () => {
 
               {folder.items.length >= 1 ? (
                 <React.Fragment>
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 flex-[1] overflow-auto">
                     {folder.items.map((item) => (
                       <Card
                         styles={item.checked ? "colored" : "soft"}
@@ -129,7 +129,7 @@ export const FolderPage = () => {
                         data-checked={item.checked}
                       >
                         <div className="flex gap-2 items-center justify-between w-full">
-                          <div className="flex items-center gap-2 w-[68%] md:w-[88%]">
+                          <div className="flex items-center gap-2 relative w-[68%] md:w-[88%]">
                             <input
                               type="checkbox"
                               id={`checkbox-${item.id}`}
