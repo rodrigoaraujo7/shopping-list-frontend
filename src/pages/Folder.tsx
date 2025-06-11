@@ -13,7 +13,6 @@ import { Input } from "../components/Input";
 
 import {
   RxArrowLeft,
-  RxDotsVertical,
   RxListBullet,
   RxExternalLink,
   RxPencil1,
@@ -30,6 +29,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import noFolderRoute from "../assets/svg/no-folder-route.svg";
 import noItems from "../assets/svg/no-items.svg";
+import deleteFolder from "../assets/svg/delete-folder.svg";
+import deleteItem from "../assets/svg/delete-item.svg";
 
 import { useFolderContext } from "../context/FolderContext";
 
@@ -41,6 +42,7 @@ export const FolderPage = () => {
   const [addItemModal, setAddItemModal] = useState<boolean>(false);
   const [editItemModal, setEditItemModal] = useState<boolean>(false);
   const [deleteItemModal, setDeleteItemModal] = useState<boolean>(false);
+  const [deleteFolderModal, setDeleteFolderModal] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<Item>();
 
   const { folders, setFolders, loading } = useFolderContext();
@@ -94,8 +96,8 @@ export const FolderPage = () => {
                 <Avatar onClick={() => navigate("../")}>
                   <RxArrowLeft color="#7f56d9" size={16} strokeWidth=".75" />
                 </Avatar>
-                <Avatar>
-                  <RxDotsVertical color="#7f56d9" size={16} strokeWidth=".75" />
+                <Avatar onClick={() => setDeleteFolderModal(true)}>
+                  <RxTrash color="#7f56d9" size={16} strokeWidth=".75" />
                 </Avatar>
               </header>
 
@@ -266,6 +268,10 @@ export const FolderPage = () => {
             onClose={() => setDeleteItemModal(false)}
             selectedItem={selectedItem}
           />
+        )}
+
+        {deleteFolderModal && (
+          <DeleteFolderForm onClose={() => setDeleteFolderModal(false)} />
         )}
       </AnimatePresence>
     </MainGrid>
@@ -473,14 +479,70 @@ const DeleteItemForm = ({
     <Modal title="Deletar item" onClose={onClose}>
       <div className="h-full flex items-center justify-center">
         <div className="flex flex-col gap-4 w-[360px]">
-          <img src={noItems} alt="" width={300} />
+          <img src={deleteItem} alt="" width={300} />
 
           <div className="text-center">
             <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
               Essa ação é irreversível
             </h1>
             <h2 className="text-sm font-medium text-gray-500">
-              Tem certeza que deseja? deletar esse item?
+              Tem certeza que deseja deletar esse item?
+            </h2>
+          </div>
+
+          <Button isFetching={isFetching} onClick={handleDelete}>
+            Deletar
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+const DeleteFolderForm = ({ onClose }: { onClose: () => void }) => {
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const { setFolders } = useFolderContext();
+
+  const navigate = useNavigate();
+  const { folderId } = useParams();
+
+  const handleDelete = async () => {
+    if (isFetching) return;
+
+    try {
+      setIsFetching(true);
+
+      await api.delete("/folder", {
+        params: {
+          id: folderId,
+        },
+      });
+
+      setFolders((prevFolders) =>
+        prevFolders.filter((pv) => pv.id !== folderId)
+      );
+
+      navigate("../");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  return (
+    <Modal title="Deletar pasta" onClose={onClose}>
+      <div className="h-full flex items-center justify-center">
+        <div className="flex flex-col gap-4 w-[360px]">
+          <img src={deleteFolder} alt="" width={300} />
+
+          <div className="text-center">
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
+              Essa ação é irreversível
+            </h1>
+            <h2 className="text-sm font-medium text-gray-500">
+              Tem certeza que deseja deletar essa pasta?
             </h2>
           </div>
 
