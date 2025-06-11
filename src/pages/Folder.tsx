@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useNavigate, useParams } from "react-router";
+
+import { AnimatePresence } from "motion/react";
 
 import { MainGrid } from "../components/MainGrid";
 import { Avatar } from "../components/Avatar";
 import { Card } from "../components/Card";
 import { Button } from "../components/Button";
+import { Modal } from "../components/Modal";
+import { Input } from "../components/Input";
 
 import {
   RxArrowLeft,
@@ -14,6 +18,13 @@ import {
   RxExternalLink,
 } from "react-icons/rx";
 import { CgSpinner } from "react-icons/cg";
+
+import { useForm } from "react-hook-form";
+import {
+  AddItemFormSchema,
+  type AddItemFormData,
+} from "../types/zod/add-item-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import noFolderRoute from "../assets/svg/no-folder-route.svg";
 import noItems from "../assets/svg/no-items.svg";
@@ -25,6 +36,8 @@ import { api } from "../services/api";
 import type { Folder, Item } from "../types/Folder";
 
 export const FolderPage = () => {
+  const [addItemModal, setAddItemModal] = useState<boolean>(false);
+
   const { folders, setFolders, loading } = useFolderContext();
   const { folderId } = useParams();
 
@@ -125,7 +138,7 @@ export const FolderPage = () => {
                                   : ""
                               }`}
                             >
-                              Checked state
+                              {item.name}
                             </label>
                             <svg
                               className="absolute w-3 h-3 ml-[2px] hidden peer-checked:block pointer-events-none"
@@ -155,7 +168,9 @@ export const FolderPage = () => {
                     ))}
                   </div>
 
-                  <Button>Adicionar novo item</Button>
+                  <Button onClick={() => setAddItemModal(true)}>
+                    Adicionar novo item
+                  </Button>
                 </React.Fragment>
               ) : (
                 <div className="h-full flex items-center justify-center">
@@ -172,7 +187,9 @@ export const FolderPage = () => {
                       </h2>
                     </div>
 
-                    <Button>Adicionar novo item</Button>
+                    <Button onClick={() => setAddItemModal(true)}>
+                      Adicionar novo item
+                    </Button>
                   </div>
                 </div>
               )}
@@ -198,6 +215,75 @@ export const FolderPage = () => {
           )}
         </React.Fragment>
       )}
+
+      <AnimatePresence mode="wait">
+        {addItemModal && <AddItemForm onClose={() => setAddItemModal(false)} />}
+      </AnimatePresence>
     </MainGrid>
+  );
+};
+
+const AddItemForm = ({ onClose }: { onClose: () => void }) => {
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const { setFolders } = useFolderContext();
+
+  const { folderId } = useParams();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddItemFormData>({
+    resolver: zodResolver(AddItemFormSchema),
+  });
+
+  const onSubmit = async (data: AddItemFormData) => {
+    if (isFetching) return;
+
+    try {
+      setIsFetching(true);
+
+      const response = await api.post("/item", {
+        name: data.name,
+        link: data.link,
+        folderId,
+      });
+
+      setFolders((prevFolders) =>
+        prevFolders.map((folder) =>
+          folder.id === folderId
+            ? {
+                ...folder,
+                items: [...folder.items, response.data],
+              }
+            : folder
+        )
+      );
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  return (
+    <Modal title="Adicionar novo item" onClose={onClose}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+        <Input
+          id="name"
+          label="Nome do item"
+          placeholder="-"
+          {...register("name")}
+          styles={errors.name && "error"}
+        />
+
+        <Input id="link" label="Link" placeholder="-" {...register("link")} />
+
+        <Button isFetching={isFetching}>Criar</Button>
+      </form>
+    </Modal>
   );
 };
