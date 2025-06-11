@@ -16,6 +16,8 @@ import {
   RxDotsVertical,
   RxListBullet,
   RxExternalLink,
+  RxPencil1,
+  RxTrash,
 } from "react-icons/rx";
 import { CgSpinner } from "react-icons/cg";
 
@@ -37,6 +39,9 @@ import type { Folder, Item } from "../types/Folder";
 
 export const FolderPage = () => {
   const [addItemModal, setAddItemModal] = useState<boolean>(false);
+  const [editItemModal, setEditItemModal] = useState<boolean>(false);
+  const [deleteItemModal, setDeleteItemModal] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<Item>();
 
   const { folders, setFolders, loading } = useFolderContext();
   const { folderId } = useParams();
@@ -122,7 +127,7 @@ export const FolderPage = () => {
                         data-checked={item.checked}
                       >
                         <div className="flex gap-2 items-center justify-between w-full">
-                          <div className="flex items-center gap-2 w-[90%]">
+                          <div className="flex items-center gap-2 w-[68%] md:w-[88%]">
                             <input
                               type="checkbox"
                               id={`checkbox-${item.id}`}
@@ -154,15 +159,45 @@ export const FolderPage = () => {
                             </svg>
                           </div>
 
-                          {item.link && (
-                            <a href={item.link} target="_blank">
-                              <RxExternalLink
+                          <div className="flex gap-2">
+                            {item.link && (
+                              <a href={item.link} target="_blank">
+                                <RxExternalLink
+                                  size={16}
+                                  strokeWidth=".5"
+                                  color={item.checked ? "#7f56d9" : "#667085"}
+                                />
+                              </a>
+                            )}
+
+                            <span
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setSelectedItem(item);
+                                setEditItemModal(true);
+                              }}
+                            >
+                              <RxPencil1
                                 size={16}
                                 strokeWidth=".5"
                                 color={item.checked ? "#7f56d9" : "#667085"}
                               />
-                            </a>
-                          )}
+                            </span>
+
+                            <span
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setSelectedItem(item);
+                                setDeleteItemModal(true);
+                              }}
+                            >
+                              <RxTrash
+                                size={16}
+                                strokeWidth=".5"
+                                color={item.checked ? "#7f56d9" : "#667085"}
+                              />
+                            </span>
+                          </div>
                         </div>
                       </Card>
                     ))}
@@ -218,6 +253,17 @@ export const FolderPage = () => {
 
       <AnimatePresence mode="wait">
         {addItemModal && <AddItemForm onClose={() => setAddItemModal(false)} />}
+
+        {editItemModal && (
+          <EditItemForm
+            onClose={() => setEditItemModal(false)}
+            selectedItem={selectedItem}
+          />
+        )}
+
+        {deleteItemModal && (
+          <AddItemForm onClose={() => setDeleteItemModal(false)} />
+        )}
       </AnimatePresence>
     </MainGrid>
   );
@@ -283,6 +329,94 @@ const AddItemForm = ({ onClose }: { onClose: () => void }) => {
         <Input id="link" label="Link" placeholder="-" {...register("link")} />
 
         <Button isFetching={isFetching}>Criar</Button>
+      </form>
+    </Modal>
+  );
+};
+
+const EditItemForm = ({
+  onClose,
+  selectedItem,
+}: {
+  onClose: () => void;
+  selectedItem: Item | undefined;
+}) => {
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const { setFolders } = useFolderContext();
+
+  const { folderId } = useParams();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddItemFormData>({
+    resolver: zodResolver(AddItemFormSchema),
+  });
+
+  const onSubmit = async (data: AddItemFormData) => {
+    if (isFetching) return;
+
+    try {
+      setIsFetching(true);
+
+      const response = await api.put(
+        "/item",
+        {
+          ...selectedItem,
+          name: data.name,
+          link: data.link,
+        },
+        {
+          params: {
+            id: selectedItem?.id,
+          },
+        }
+      );
+
+      setFolders((prevFolders) =>
+        prevFolders.map((folder) =>
+          folder.id === folderId
+            ? {
+                ...folder,
+                items: folder.items.map((i) =>
+                  i.id === selectedItem?.id ? response.data : i
+                ),
+              }
+            : folder
+        )
+      );
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  return (
+    <Modal title="Atualizar item" onClose={onClose}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+        <Input
+          id="name"
+          label="Nome do item"
+          placeholder="-"
+          {...register("name")}
+          defaultValue={selectedItem?.name}
+          styles={errors.name && "error"}
+        />
+
+        <Input
+          id="link"
+          label="Link"
+          placeholder="-"
+          {...register("link")}
+          defaultValue={selectedItem?.link}
+        />
+
+        <Button isFetching={isFetching}>Salvar</Button>
       </form>
     </Modal>
   );
