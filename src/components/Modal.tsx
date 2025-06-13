@@ -19,14 +19,14 @@ export const Modal = ({ title, onClose, ...props }: ModalProps) => {
 
   return (
     <motion.div
-      className="fixed inset-0 p-4 flex justify-center items-center bg-[#00000090]"
+      className="bg-[#00000090] z-10 fixed inset-0 p-4 flex justify-center items-start lg:items-center"
       onClick={handleClickOutside}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <div
-        className="bg-white p-6 w-fit h-fit max-w-full rounded-4xl md:min-w-[425px] md:max-w-[768px]"
+        className="bg-white p-6 w-full h-fit max-w-full rounded-4xl md:w-fit md:min-w-[425px] md:max-w-[768px]"
         ref={modalRef}
         {...props}
       >

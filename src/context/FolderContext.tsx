@@ -36,8 +36,6 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchFolders();
-
-    window.scrollTo(0, 1);
   }, []);
 
   return (
