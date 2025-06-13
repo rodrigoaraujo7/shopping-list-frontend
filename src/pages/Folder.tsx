@@ -12,7 +12,7 @@ import { Modal } from "../components/Modal";
 import { Input } from "../components/Input";
 import { FolderItem } from "../components/FolderItem";
 
-import { RxArrowLeft, RxListBullet, RxTrash } from "react-icons/rx";
+import { RxArrowLeft, RxListBullet, RxPencil1, RxTrash } from "react-icons/rx";
 import { CgSpinner } from "react-icons/cg";
 
 import { useForm } from "react-hook-form";
@@ -20,6 +20,10 @@ import {
   AddItemFormSchema,
   type AddItemFormData,
 } from "../types/zod/add-item-form";
+import {
+  AddFolderFormSchema,
+  type AddFolderFormData,
+} from "../types/zod/add-folder-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import noFolderRoute from "../assets/svg/no-folder-route.svg";
@@ -33,8 +37,15 @@ import { api } from "../services/api";
 import type { Folder } from "../types/Folder";
 
 export const FolderPage = () => {
-  const [addItemModal, setAddItemModal] = useState<boolean>(false);
-  const [deleteFolderModal, setDeleteFolderModal] = useState<boolean>(false);
+  const [modal, setModal] = useState<{
+    addItem: boolean;
+    edit: boolean;
+    delete: boolean;
+  }>({
+    addItem: false,
+    edit: false,
+    delete: false,
+  });
 
   const { folders, loading } = useFolderContext();
   const { folderId } = useParams();
@@ -59,9 +70,23 @@ export const FolderPage = () => {
                 <Avatar onClick={() => navigate("../")}>
                   <RxArrowLeft color="#7f56d9" size={16} strokeWidth=".75" />
                 </Avatar>
-                <Avatar onClick={() => setDeleteFolderModal(true)}>
-                  <RxTrash color="#7f56d9" size={16} strokeWidth=".75" />
-                </Avatar>
+
+                <div className="flex gap-4">
+                  <Avatar
+                    onClick={() =>
+                      setModal((prev) => ({ ...prev, edit: true }))
+                    }
+                  >
+                    <RxPencil1 color="#7f56d9" size={16} strokeWidth=".75" />
+                  </Avatar>
+                  <Avatar
+                    onClick={() =>
+                      setModal((prev) => ({ ...prev, delete: true }))
+                    }
+                  >
+                    <RxTrash color="#7f56d9" size={16} strokeWidth=".75" />
+                  </Avatar>
+                </div>
               </header>
 
               <h1 className="font-bold text-2xl text-gray-700">
@@ -90,7 +115,11 @@ export const FolderPage = () => {
                     ))}
                   </div>
 
-                  <Button onClick={() => setAddItemModal(true)}>
+                  <Button
+                    onClick={() =>
+                      setModal((prev) => ({ ...prev, addItem: true }))
+                    }
+                  >
                     Adicionar novo item
                   </Button>
                 </React.Fragment>
@@ -109,7 +138,11 @@ export const FolderPage = () => {
                       </h2>
                     </div>
 
-                    <Button onClick={() => setAddItemModal(true)}>
+                    <Button
+                      onClick={() =>
+                        setModal((prev) => ({ ...prev, addItem: true }))
+                      }
+                    >
                       Adicionar novo item
                     </Button>
                   </div>
@@ -139,10 +172,23 @@ export const FolderPage = () => {
       )}
 
       <AnimatePresence mode="wait">
-        {addItemModal && <AddItemForm onClose={() => setAddItemModal(false)} />}
+        {modal.addItem && (
+          <AddItemForm
+            onClose={() => setModal((prev) => ({ ...prev, addItem: false }))}
+          />
+        )}
 
-        {deleteFolderModal && (
-          <DeleteFolderForm onClose={() => setDeleteFolderModal(false)} />
+        {modal.edit && (
+          <EditFolderForm
+            folder={folder}
+            onClose={() => setModal((prev) => ({ ...prev, edit: false }))}
+          />
+        )}
+
+        {modal.delete && (
+          <DeleteFolderForm
+            onClose={() => setModal((prev) => ({ ...prev, delete: false }))}
+          />
         )}
       </AnimatePresence>
     </MainGrid>
@@ -207,6 +253,90 @@ const AddItemForm = ({ onClose }: { onClose: () => void }) => {
         />
 
         <Input id="link" label="Link" placeholder="-" {...register("link")} />
+
+        <Button isFetching={isFetching}>Criar</Button>
+      </form>
+    </Modal>
+  );
+};
+
+const EditFolderForm = ({
+  onClose,
+  folder,
+}: {
+  onClose: () => void;
+  folder: Folder | undefined;
+}) => {
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const { setFolders } = useFolderContext();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddFolderFormData>({
+    resolver: zodResolver(AddFolderFormSchema),
+  });
+
+  const onSubmit = async (data: AddFolderFormData) => {
+    if (isFetching) return;
+
+    try {
+      setIsFetching(true);
+
+      const response = await api.put<Folder>(
+        "/folder",
+        {
+          title: data.title,
+          description: data.description,
+        },
+        {
+          params: {
+            id: folder?.id,
+          },
+        }
+      );
+
+      setFolders((prev) =>
+        prev.map((f) =>
+          f.id === response.data.id
+            ? {
+                ...f,
+                title: response.data.title,
+                description: response.data.description,
+              }
+            : f
+        )
+      );
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  return (
+    <Modal title="Editar pasta" onClose={onClose}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+        <Input
+          id="name"
+          label="Nome da pasta"
+          placeholder="-"
+          {...register("title")}
+          defaultValue={folder?.title}
+          styles={errors.title && "error"}
+        />
+
+        <Input
+          id="description"
+          label="Descrição da pasta"
+          placeholder="-"
+          {...register("description")}
+          defaultValue={folder?.description}
+        />
 
         <Button isFetching={isFetching}>Criar</Button>
       </form>
