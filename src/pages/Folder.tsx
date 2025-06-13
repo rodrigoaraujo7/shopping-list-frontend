@@ -338,7 +338,7 @@ const EditFolderForm = ({
           defaultValue={folder?.description}
         />
 
-        <Button isFetching={isFetching}>Criar</Button>
+        <Button isFetching={isFetching}>Atualizar</Button>
       </form>
     </Modal>
   );
