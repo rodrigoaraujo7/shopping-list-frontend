@@ -36,6 +36,8 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchFolders();
+
+    window.scrollTo(0, 1);
   }, []);
 
   return (
@@ -51,6 +53,7 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useFolderContext = () => {
   const context = useContext(FolderContext);
 
