@@ -14,6 +14,7 @@ import { MainGrid } from "../components/MainGrid";
 import { InputSearch } from "../components/InputSearch";
 
 import noData from "../assets/svg/no-data.svg";
+import noFilterData from "../assets/svg/no-filterData.svg";
 
 import { RxListBullet, RxPlus } from "react-icons/rx";
 import { CgSpinner } from "react-icons/cg";
@@ -143,6 +144,28 @@ export const App = () => {
                     ))}
                   </React.Fragment>
                 )}
+
+                {searchFolderValue.length > 0 &&
+                  filteredFolders.length <= 0 && (
+                    <div className="flex justify-center items-center h-full">
+                      <Card
+                        styles="outline"
+                        flex="center"
+                        style={{ width: "360px" }}
+                      >
+                        <img src={noFilterData} alt="no-data" width={300} />
+
+                        <div className="text-center">
+                          <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
+                            Pasta não encontrada
+                          </h1>
+                          <h2 className="text-sm font-medium text-gray-500">
+                            A pasta que você está buscando não existe
+                          </h2>
+                        </div>
+                      </Card>
+                    </div>
+                  )}
               </div>
             </div>
           )}
