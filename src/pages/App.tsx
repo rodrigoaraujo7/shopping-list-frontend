@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import { AnimatePresence } from "motion/react";
 
@@ -27,11 +27,26 @@ import {
 
 import { api } from "../services/api";
 
+import type { Folder } from "../types/Folder";
+
 export const App = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
   const [searchFolderValue, setSearchFolderValue] = useState<string>("");
 
   const { folders, loading } = useFolderContext();
+
+  const normalizeText = (text: string) =>
+    text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+
+  const filteredFolders: Folder[] =
+    searchFolderValue.length > 0
+      ? folders.filter((folder) =>
+          normalizeText(folder.title).includes(normalizeText(searchFolderValue))
+        )
+      : [];
 
   const navigate = useNavigate();
 
@@ -68,34 +83,66 @@ export const App = () => {
               <InputSearch
                 state={searchFolderValue}
                 setState={setSearchFolderValue}
-                placeholder="teste"
+                placeholder="Buscar pelo nome da pasta ..."
               />
               <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
-                {folders.map((folder) => (
-                  <Card
-                    key={folder.id}
-                    className="cursor-pointer"
-                    onClick={() => navigate(`/folder/${folder.id}`)}
-                  >
-                    <h1 className="font-bold text-lg text-gray-700">
-                      {folder.title}
-                    </h1>
+                {searchFolderValue.length > 0 ? (
+                  <React.Fragment>
+                    {filteredFolders.map((folder) => (
+                      <Card
+                        key={folder.id}
+                        className="cursor-pointer"
+                        onClick={() => navigate(`/folder/${folder.id}`)}
+                      >
+                        <h1 className="font-bold text-lg text-gray-700">
+                          {folder.title}
+                        </h1>
 
-                    {folder.description && (
-                      <h2 className="font-normal text-sm text-gray-500">
-                        {folder.description}
-                      </h2>
-                    )}
+                        {folder.description && (
+                          <h2 className="font-normal text-sm text-gray-500">
+                            {folder.description}
+                          </h2>
+                        )}
 
-                    <div className="flex items-center gap-1">
-                      <RxListBullet color="#667085" />
-                      <span className="font-normal text-sm text-gray-500">
-                        {folder.items.filter((item) => item.checked).length}/
-                        {folder.items.length} itens completos
-                      </span>
-                    </div>
-                  </Card>
-                ))}
+                        <div className="flex items-center gap-1">
+                          <RxListBullet color="#667085" />
+                          <span className="font-normal text-sm text-gray-500">
+                            {folder.items.filter((item) => item.checked).length}
+                            /{folder.items.length} itens completos
+                          </span>
+                        </div>
+                      </Card>
+                    ))}
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    {folders.map((folder) => (
+                      <Card
+                        key={folder.id}
+                        className="cursor-pointer"
+                        onClick={() => navigate(`/folder/${folder.id}`)}
+                      >
+                        <h1 className="font-bold text-lg text-gray-700">
+                          {folder.title}
+                        </h1>
+
+                        {folder.description && (
+                          <h2 className="font-normal text-sm text-gray-500">
+                            {folder.description}
+                          </h2>
+                        )}
+
+                        <div className="flex items-center gap-1">
+                          <RxListBullet color="#667085" />
+                          <span className="font-normal text-sm text-gray-500">
+                            {folder.items.filter((item) => item.checked).length}
+                            /{folder.items.length} itens completos
+                          </span>
+                        </div>
+                      </Card>
+                    ))}
+                  </React.Fragment>
+                )}
               </div>
             </div>
           )}
