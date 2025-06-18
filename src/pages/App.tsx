@@ -62,32 +62,36 @@ export const App = () => {
               </Card>
             </div>
           ) : (
-            <div className="flex flex-col gap-3 h-full pr-1 overflow-auto">
-              {folders.map((folder) => (
-                <Card
-                  key={folder.id}
-                  className="cursor-pointer"
-                  onClick={() => navigate(`/folder/${folder.id}`)}
-                >
-                  <h1 className="font-bold text-lg text-gray-700">
-                    {folder.title}
-                  </h1>
+            <div className="h-full flex flex-col gap-4">
+              {/* TODO: input search */}
+              <h1>teste</h1>
+              <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
+                {folders.map((folder) => (
+                  <Card
+                    key={folder.id}
+                    className="cursor-pointer"
+                    onClick={() => navigate(`/folder/${folder.id}`)}
+                  >
+                    <h1 className="font-bold text-lg text-gray-700">
+                      {folder.title}
+                    </h1>
 
-                  {folder.description && (
-                    <h2 className="font-normal text-sm text-gray-500">
-                      {folder.description}
-                    </h2>
-                  )}
+                    {folder.description && (
+                      <h2 className="font-normal text-sm text-gray-500">
+                        {folder.description}
+                      </h2>
+                    )}
 
-                  <div className="flex items-center gap-1">
-                    <RxListBullet color="#667085" />
-                    <span className="font-normal text-sm text-gray-500">
-                      {folder.items.filter((item) => item.checked).length}/
-                      {folder.items.length} itens completos
-                    </span>
-                  </div>
-                </Card>
-              ))}
+                    <div className="flex items-center gap-1">
+                      <RxListBullet color="#667085" />
+                      <span className="font-normal text-sm text-gray-500">
+                        {folder.items.filter((item) => item.checked).length}/
+                        {folder.items.length} itens completos
+                      </span>
+                    </div>
+                  </Card>
+                ))}
+              </div>
             </div>
           )}
 
