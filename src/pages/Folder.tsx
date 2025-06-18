@@ -11,6 +11,7 @@ import { Button } from "../components/Button";
 import { Modal } from "../components/Modal";
 import { Input } from "../components/Input";
 import { FolderItem } from "../components/FolderItem";
+import { InputSearch } from "../components/InputSearch";
 
 import { RxArrowLeft, RxListBullet, RxPencil1, RxTrash } from "react-icons/rx";
 import { CgSpinner } from "react-icons/cg";
@@ -29,12 +30,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import noFolderRoute from "../assets/svg/no-folder-route.svg";
 import noItems from "../assets/svg/no-items.svg";
 import deleteFolder from "../assets/svg/delete-folder.svg";
+import noFilterData from "../assets/svg/no-filterData.svg";
 
 import { useFolderContext } from "../context/FolderContext";
 
 import { api } from "../services/api";
 
-import type { Folder } from "../types/Folder";
+import type { Folder, Item } from "../types/Folder";
 
 export const FolderPage = () => {
   const [modal, setModal] = useState<{
@@ -46,6 +48,7 @@ export const FolderPage = () => {
     edit: false,
     delete: false,
   });
+  const [searchItemValue, setSearchItemValue] = useState<string>("");
 
   const { folders, loading } = useFolderContext();
   const { folderId } = useParams();
@@ -53,6 +56,19 @@ export const FolderPage = () => {
   const folder: Folder | undefined = folders.find(
     (item) => item.id === folderId
   );
+
+  const normalizeText = (text: string) =>
+    text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+
+  const filteredItems: Item[] =
+    searchItemValue.length > 0
+      ? folder?.items?.filter((item) =>
+          normalizeText(item.name).includes(normalizeText(searchItemValue))
+        ) ?? []
+      : [];
 
   const navigate = useNavigate();
 
@@ -107,46 +123,97 @@ export const FolderPage = () => {
                 </span>
               </div>
 
-              {folder.items.length >= 1 ? (
-                <React.Fragment>
-                  <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
-                    {folder.items.map((item) => (
-                      <FolderItem item={item} key={item.id} />
-                    ))}
-                  </div>
+              {folder.items.length > 0 && (
+                <InputSearch
+                  state={searchItemValue}
+                  setState={setSearchItemValue}
+                  placeholder="Buscar pelo nome do item"
+                />
+              )}
 
-                  <Button
-                    onClick={() =>
-                      setModal((prev) => ({ ...prev, addItem: true }))
-                    }
-                  >
-                    Adicionar novo item
-                  </Button>
+              {searchItemValue.length > 0 ? (
+                <React.Fragment>
+                  {filteredItems.length > 0 ? (
+                    <React.Fragment>
+                      <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
+                        {filteredItems.map((item) => (
+                          <FolderItem item={item} key={item.id} />
+                        ))}
+                      </div>
+
+                      <Button
+                        onClick={() =>
+                          setModal((prev) => ({ ...prev, addItem: true }))
+                        }
+                      >
+                        Adicionar novo item
+                      </Button>
+                    </React.Fragment>
+                  ) : (
+                    <div className="flex justify-center items-center h-full">
+                      <Card
+                        styles="outline"
+                        flex="center"
+                        style={{ width: "360px" }}
+                      >
+                        <img src={noFilterData} alt="no-data" width={300} />
+
+                        <div className="text-center">
+                          <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
+                            Pasta não encontrada
+                          </h1>
+                          <h2 className="text-sm font-medium text-gray-500">
+                            A pasta que você está buscando não existe
+                          </h2>
+                        </div>
+                      </Card>
+                    </div>
+                  )}
                 </React.Fragment>
               ) : (
-                <div className="h-full flex items-center justify-center">
-                  <div className="flex flex-col gap-4 w-[360px]">
-                    <img src={noItems} alt="" width={300} />
+                <React.Fragment>
+                  {folder.items.length >= 1 ? (
+                    <React.Fragment>
+                      <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
+                        {folder.items.map((item) => (
+                          <FolderItem item={item} key={item.id} />
+                        ))}
+                      </div>
 
-                    <div className="text-center">
-                      <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
-                        Adicione items para sua lista
-                      </h1>
-                      <h2 className="text-sm font-medium text-gray-500">
-                        Sua lista de compras inteligente será exibida aqui.
-                        Comece criando um novo item
-                      </h2>
+                      <Button
+                        onClick={() =>
+                          setModal((prev) => ({ ...prev, addItem: true }))
+                        }
+                      >
+                        Adicionar novo item
+                      </Button>
+                    </React.Fragment>
+                  ) : (
+                    <div className="h-full flex items-center justify-center">
+                      <div className="flex flex-col gap-4 w-[360px]">
+                        <img src={noItems} alt="" width={300} />
+
+                        <div className="text-center">
+                          <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
+                            Adicione items para sua lista
+                          </h1>
+                          <h2 className="text-sm font-medium text-gray-500">
+                            Sua lista de compras inteligente será exibida aqui.
+                            Comece criando um novo item
+                          </h2>
+                        </div>
+
+                        <Button
+                          onClick={() =>
+                            setModal((prev) => ({ ...prev, addItem: true }))
+                          }
+                        >
+                          Adicionar novo item
+                        </Button>
+                      </div>
                     </div>
-
-                    <Button
-                      onClick={() =>
-                        setModal((prev) => ({ ...prev, addItem: true }))
-                      }
-                    >
-                      Adicionar novo item
-                    </Button>
-                  </div>
-                </div>
+                  )}
+                </React.Fragment>
               )}
             </div>
           ) : (
