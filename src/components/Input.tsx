@@ -22,7 +22,7 @@ export const Input = ({ label, styles, ...props }: InputProps) => {
       className="w-full flex flex-col gap-[6px] text-sm text-gray-700 font-medium"
     >
       {label}
-      <input className={input({ styles })} {...props} />
+      <input className={input({ styles })} autoComplete="off" {...props} />
     </label>
   );
 };

@@ -28,6 +28,7 @@ export const InputSearch = ({
       <input
         type="text"
         className="py-2 flex-[1] outline-none text-sm"
+        autoComplete="off"
         value={state}
         onChange={(e) => setState(e.target.value)}
         {...props}
