@@ -18,9 +18,9 @@ export const InputSearch = ({
   ...props
 }: InputSearchProps) => {
   return (
-    <div className="group w-full px-3 py-1 rounded-full flex items-center gap-4 border-[1px] border-gray-200 focus-within:border-primary-600 transition-colors">
+    <div className="group w-full px-3 py-1 rounded-full flex items-center justify-between gap-2 border-[1px] border-gray-200 focus-within:border-primary-600 transition-colors">
       <CiSearch
-        className="stroke-gray-500 group-focus-within:stroke-gray-900 transition-colors"
+        className="shrink-0 stroke-gray-500 group-focus-within:stroke-gray-900 transition-colors"
         strokeWidth={1.5}
         size={20}
       />

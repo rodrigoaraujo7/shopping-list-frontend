@@ -84,7 +84,7 @@ export const App = () => {
               <InputSearch
                 state={searchFolderValue}
                 setState={setSearchFolderValue}
-                placeholder="Buscar pelo nome da pasta ..."
+                placeholder="Buscar pelo nome da pasta"
               />
               <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
                 {searchFolderValue.length > 0 ? (
