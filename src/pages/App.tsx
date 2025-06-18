@@ -11,6 +11,7 @@ import { Modal } from "../components/Modal";
 import { Input } from "../components/Input";
 import { Avatar } from "../components/Avatar";
 import { MainGrid } from "../components/MainGrid";
+import { InputSearch } from "../components/InputSearch";
 
 import noData from "../assets/svg/no-data.svg";
 
@@ -28,6 +29,7 @@ import { api } from "../services/api";
 
 export const App = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
+  const [searchFolderValue, setSearchFolderValue] = useState<string>("");
 
   const { folders, loading } = useFolderContext();
 
@@ -63,8 +65,11 @@ export const App = () => {
             </div>
           ) : (
             <div className="h-full flex flex-col gap-4">
-              {/* TODO: input search */}
-              <h1>teste</h1>
+              <InputSearch
+                state={searchFolderValue}
+                setState={setSearchFolderValue}
+                placeholder="teste"
+              />
               <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
                 {folders.map((folder) => (
                   <Card
