@@ -160,10 +160,10 @@ export const FolderPage = () => {
 
                         <div className="text-center">
                           <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
-                            Pasta não encontrada
+                            Item não encontrado
                           </h1>
                           <h2 className="text-sm font-medium text-gray-500">
-                            A pasta que você está buscando não existe
+                            O item que você está buscando não existe
                           </h2>
                         </div>
                       </Card>
