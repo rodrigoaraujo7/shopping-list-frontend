@@ -34,6 +34,10 @@ export const EditFolderModal = ({
     formState: { errors },
   } = useForm<AddFolderFormData>({
     resolver: zodResolver(AddFolderFormSchema),
+    defaultValues: {
+      title: folder?.title,
+      description: folder?.description,
+    },
   });
 
   const onSubmit = async (data: AddFolderFormData) => {

@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import { Button } from "../Button";
 import { Modal } from "../Modal";
 
-import deleteItem from "../assets/svg/delete-item.svg";
+import deleteItem from "../../assets/svg/delete-item.svg";
 
 import { useFolderContext } from "../../context/FolderContext";
 
