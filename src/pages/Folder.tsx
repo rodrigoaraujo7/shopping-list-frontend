@@ -23,6 +23,8 @@ import noFilterData from "../assets/svg/no-filterData.svg";
 
 import { useFolderContext } from "../context/FolderContext";
 
+import { normalizeText } from "../util/normalizeText";
+
 import type { Folder, Item } from "../types/Folder";
 
 export const FolderPage = () => {
@@ -43,12 +45,6 @@ export const FolderPage = () => {
   const folder: Folder | undefined = folders.find(
     (item) => item.id === folderId
   );
-
-  const normalizeText = (text: string) =>
-    text
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
 
   const filteredItems: Item[] =
     searchItemValue.length > 0

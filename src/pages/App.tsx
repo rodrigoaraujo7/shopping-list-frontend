@@ -18,6 +18,8 @@ import noFilterData from "../assets/svg/no-filterData.svg";
 import { RxListBullet, RxPlus } from "react-icons/rx";
 import { CgSpinner } from "react-icons/cg";
 
+import { normalizeText } from "../util/normalizeText";
+
 import type { Folder } from "../types/Folder";
 
 export const App = () => {
@@ -25,12 +27,6 @@ export const App = () => {
   const [searchFolderValue, setSearchFolderValue] = useState<string>("");
 
   const { folders, loading } = useFolderContext();
-
-  const normalizeText = (text: string) =>
-    text
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
 
   const filteredFolders: Folder[] =
     searchFolderValue.length > 0
