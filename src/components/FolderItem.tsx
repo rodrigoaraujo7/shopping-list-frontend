@@ -5,19 +5,10 @@ import { useParams } from "react-router";
 import { AnimatePresence } from "motion/react";
 
 import { Card } from "../components/Card";
-import { Button } from "../components/Button";
-import { Modal } from "../components/Modal";
-import { Input } from "../components/Input";
 import { DeleteItemModal } from "./modals/DeleteItemModal";
+import { EditItemModal } from "./modals/EditItemModal";
 
 import { RxExternalLink, RxPencil1, RxTrash } from "react-icons/rx";
-
-import { useForm } from "react-hook-form";
-import {
-  AddItemFormSchema,
-  type AddItemFormData,
-} from "../types/zod/add-item-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useFolderContext } from "../context/FolderContext";
 
@@ -148,7 +139,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
 
       <AnimatePresence mode="wait">
         {editItemModal && (
-          <EditItemForm
+          <EditItemModal
             onClose={() => setEditItemModal(false)}
             selectedItem={selectedItem}
           />
@@ -162,93 +153,5 @@ export const FolderItem = ({ item }: FolderItemProps) => {
         )}
       </AnimatePresence>
     </React.Fragment>
-  );
-};
-
-const EditItemForm = ({
-  onClose,
-  selectedItem,
-}: {
-  onClose: () => void;
-  selectedItem: Item | undefined;
-}) => {
-  const [isFetching, setIsFetching] = useState<boolean>(false);
-
-  const { setFolders } = useFolderContext();
-
-  const { folderId } = useParams();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AddItemFormData>({
-    resolver: zodResolver(AddItemFormSchema),
-  });
-
-  const onSubmit = async (data: AddItemFormData) => {
-    if (isFetching) return;
-
-    try {
-      setIsFetching(true);
-
-      const response = await api.put(
-        "/item",
-        {
-          ...selectedItem,
-          name: data.name,
-          link: data.link,
-        },
-        {
-          params: {
-            id: selectedItem?.id,
-          },
-        }
-      );
-
-      setFolders((prevFolders) =>
-        prevFolders.map((folder) =>
-          folder.id === folderId
-            ? {
-                ...folder,
-                items: folder.items.map((i) =>
-                  i.id === selectedItem?.id ? response.data : i
-                ),
-              }
-            : folder
-        )
-      );
-
-      onClose();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsFetching(false);
-    }
-  };
-
-  return (
-    <Modal title="Atualizar item" onClose={onClose}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-        <Input
-          id="name"
-          label="Nome do item"
-          placeholder="-"
-          {...register("name")}
-          defaultValue={selectedItem?.name}
-          styles={errors.name && "error"}
-        />
-
-        <Input
-          id="link"
-          label="Link"
-          placeholder="-"
-          {...register("link")}
-          defaultValue={selectedItem?.link}
-        />
-
-        <Button isFetching={isFetching}>Salvar</Button>
-      </form>
-    </Modal>
   );
 };
