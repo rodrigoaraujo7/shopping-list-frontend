@@ -59,6 +59,10 @@ export const FolderPage = () => {
 
   const navigate = useNavigate();
 
+  const handleModalChange = (modalType: keyof typeof modal, value: boolean) => {
+    setModal((prev) => ({ ...prev, [modalType]: value }));
+  };
+
   return (
     <MainGrid>
       {loading ? (
@@ -75,18 +79,10 @@ export const FolderPage = () => {
                 </Avatar>
 
                 <div className="flex gap-4">
-                  <Avatar
-                    onClick={() =>
-                      setModal((prev) => ({ ...prev, edit: true }))
-                    }
-                  >
+                  <Avatar onClick={() => handleModalChange("edit", true)}>
                     <RxPencil1 color="#7f56d9" size={16} strokeWidth=".75" />
                   </Avatar>
-                  <Avatar
-                    onClick={() =>
-                      setModal((prev) => ({ ...prev, delete: true }))
-                    }
-                  >
+                  <Avatar onClick={() => handleModalChange("delete", true)}>
                     <RxTrash color="#7f56d9" size={16} strokeWidth=".75" />
                   </Avatar>
                 </div>
@@ -129,9 +125,7 @@ export const FolderPage = () => {
                       </div>
 
                       <Button
-                        onClick={() =>
-                          setModal((prev) => ({ ...prev, addItem: true }))
-                        }
+                        onClick={() => handleModalChange("addItem", true)}
                       >
                         Adicionar novo item
                       </Button>
@@ -168,9 +162,7 @@ export const FolderPage = () => {
                       </div>
 
                       <Button
-                        onClick={() =>
-                          setModal((prev) => ({ ...prev, addItem: true }))
-                        }
+                        onClick={() => handleModalChange("addItem", true)}
                       >
                         Adicionar novo item
                       </Button>
@@ -191,9 +183,7 @@ export const FolderPage = () => {
                         </div>
 
                         <Button
-                          onClick={() =>
-                            setModal((prev) => ({ ...prev, addItem: true }))
-                          }
+                          onClick={() => handleModalChange("addItem", true)}
                         >
                           Adicionar novo item
                         </Button>
@@ -227,21 +217,19 @@ export const FolderPage = () => {
 
       <AnimatePresence mode="wait">
         {modal.addItem && (
-          <AddItemModal
-            onClose={() => setModal((prev) => ({ ...prev, addItem: false }))}
-          />
+          <AddItemModal onClose={() => handleModalChange("addItem", false)} />
         )}
 
         {modal.edit && (
           <EditFolderModal
             folder={folder}
-            onClose={() => setModal((prev) => ({ ...prev, edit: false }))}
+            onClose={() => handleModalChange("edit", false)}
           />
         )}
 
         {modal.delete && (
           <DeleteFolderModal
-            onClose={() => setModal((prev) => ({ ...prev, delete: false }))}
+            onClose={() => handleModalChange("delete", false)}
           />
         )}
       </AnimatePresence>
