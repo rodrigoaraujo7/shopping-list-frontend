@@ -8,6 +8,7 @@ import { Card } from "../components/Card";
 import { Button } from "../components/Button";
 import { Modal } from "../components/Modal";
 import { Input } from "../components/Input";
+import { DeleteItemModal } from "./modals/DeleteItemModal";
 
 import { RxExternalLink, RxPencil1, RxTrash } from "react-icons/rx";
 
@@ -17,8 +18,6 @@ import {
   type AddItemFormData,
 } from "../types/zod/add-item-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import deleteItem from "../assets/svg/delete-item.svg";
 
 import { useFolderContext } from "../context/FolderContext";
 
@@ -156,7 +155,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
         )}
 
         {deleteItemModal && (
-          <DeleteItemForm
+          <DeleteItemModal
             onClose={() => setDeleteItemModal(false)}
             selectedItem={selectedItem}
           />
@@ -250,74 +249,6 @@ const EditItemForm = ({
 
         <Button isFetching={isFetching}>Salvar</Button>
       </form>
-    </Modal>
-  );
-};
-
-const DeleteItemForm = ({
-  onClose,
-  selectedItem,
-}: {
-  onClose: () => void;
-  selectedItem: Item | undefined;
-}) => {
-  const [isFetching, setIsFetching] = useState<boolean>(false);
-
-  const { setFolders } = useFolderContext();
-
-  const { folderId } = useParams();
-
-  const handleDelete = async () => {
-    if (isFetching) return;
-
-    try {
-      setIsFetching(true);
-
-      await api.delete("/item", {
-        params: {
-          id: selectedItem?.id,
-        },
-      });
-
-      setFolders((prevFolders) =>
-        prevFolders.map((folder) =>
-          folder.id === folderId
-            ? {
-                ...folder,
-                items: folder.items.filter((i) => i.id !== selectedItem?.id),
-              }
-            : folder
-        )
-      );
-
-      onClose();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsFetching(false);
-    }
-  };
-
-  return (
-    <Modal title="Deletar item" onClose={onClose}>
-      <div className="h-full flex items-center justify-center">
-        <div className="flex flex-col gap-4 w-[360px]">
-          <img src={deleteItem} alt="" width={300} />
-
-          <div className="text-center">
-            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
-              Essa ação é irreversível
-            </h1>
-            <h2 className="text-sm font-medium text-gray-500">
-              Tem certeza que deseja deletar esse item?
-            </h2>
-          </div>
-
-          <Button isFetching={isFetching} onClick={handleDelete}>
-            Deletar
-          </Button>
-        </div>
-      </div>
     </Modal>
   );
 };

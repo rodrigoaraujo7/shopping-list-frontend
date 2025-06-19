@@ -7,26 +7,16 @@ import { useNavigate } from "react-router";
 import { Card } from "../components/Card";
 import { useFolderContext } from "../context/FolderContext";
 import { Button } from "../components/Button";
-import { Modal } from "../components/Modal";
-import { Input } from "../components/Input";
 import { Avatar } from "../components/Avatar";
 import { MainGrid } from "../components/MainGrid";
 import { InputSearch } from "../components/InputSearch";
+import { AddFolderModal } from "../components/modals/AddFolderModal";
 
 import noData from "../assets/svg/no-data.svg";
 import noFilterData from "../assets/svg/no-filterData.svg";
 
 import { RxListBullet, RxPlus } from "react-icons/rx";
 import { CgSpinner } from "react-icons/cg";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import {
-  type AddFolderFormData,
-  AddFolderFormSchema,
-} from "../types/zod/add-folder-form";
-
-import { api } from "../services/api";
 
 import type { Folder } from "../types/Folder";
 
@@ -193,67 +183,9 @@ export const App = () => {
 
       <AnimatePresence mode="wait">
         {addFolderModal && (
-          <AddFolderForm onClose={() => setAddFolderModal(false)} />
+          <AddFolderModal onClose={() => setAddFolderModal(false)} />
         )}
       </AnimatePresence>
     </MainGrid>
-  );
-};
-
-const AddFolderForm = ({ onClose }: { onClose: () => void }) => {
-  const [isFetching, setIsFetching] = useState<boolean>(false);
-
-  const { setFolders } = useFolderContext();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AddFolderFormData>({
-    resolver: zodResolver(AddFolderFormSchema),
-  });
-
-  const onSubmit = async (data: AddFolderFormData) => {
-    if (isFetching) return;
-
-    try {
-      setIsFetching(true);
-
-      const response = await api.post("/folder", {
-        title: data.title,
-        description: data.description,
-      });
-
-      setFolders((folder) => [...folder, { ...response.data, items: [] }]);
-
-      onClose();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsFetching(false);
-    }
-  };
-
-  return (
-    <Modal title="Adicionar nova pasta" onClose={onClose}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-        <Input
-          id="name"
-          label="Nome da pasta"
-          placeholder="-"
-          {...register("title")}
-          styles={errors.title && "error"}
-        />
-
-        <Input
-          id="description"
-          label="Descrição da pasta"
-          placeholder="-"
-          {...register("description")}
-        />
-
-        <Button isFetching={isFetching}>Criar</Button>
-      </form>
-    </Modal>
   );
 };
