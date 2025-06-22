@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 
 import { BrowserRouter, Routes, Route } from "react-router";
 
+import { Flip, ToastContainer } from "react-toastify";
+
 import { FolderProvider } from "./context/FolderContext.tsx";
 import { FolderPage } from "./pages/Folder.tsx";
 
@@ -22,6 +24,20 @@ createRoot(document.getElementById("root")!).render(
           <Route path="*" element={<h1>Página não encontrada</h1>} />
         </Routes>
       </BrowserRouter>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Flip}
+      />
     </FolderProvider>
   </StrictMode>
 );

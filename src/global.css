@@ -23,6 +23,11 @@
   --color-auxiliary-red: #ff2e2e;
 }
 
+:root {
+  --toastify-color-success: var(--color-primary-400);
+  --toastify-color-progress-success: var(--color-primary-400);
+}
+
 * {
   font-family: "Inter", sans-serif;
 
