@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { toast } from "react-toastify";
+
 import { Button } from "../Button";
 import { Modal } from "../Modal";
 import { Input } from "../Input";
@@ -72,8 +74,10 @@ export const EditFolderModal = ({
       );
 
       onClose();
+      toast.success("Pasta editada com sucesso!");
     } catch (error) {
       console.log(error);
+      toast.warning("Erro ao editar pasta!");
     } finally {
       setIsFetching(false);
     }

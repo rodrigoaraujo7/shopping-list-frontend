@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { useParams } from "react-router";
 
+import { toast } from "react-toastify";
+
 import { Button } from "../Button";
 import { Modal } from "../Modal";
 
@@ -50,8 +52,10 @@ export const DeleteItemModal = ({
       );
 
       onClose();
+      toast.success("Item deletado com sucesso!");
     } catch (error) {
       console.log(error);
+      toast.error("Erro ao deletar item!");
     } finally {
       setIsFetching(false);
     }

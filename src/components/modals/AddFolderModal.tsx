@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { toast } from "react-toastify";
+
 import { Modal } from "../Modal";
 import { Input } from "../Input";
 import { Button } from "../Button";
@@ -42,8 +44,10 @@ export const AddFolderModal = ({ onClose }: { onClose: () => void }) => {
       setFolders((folder) => [...folder, { ...response.data, items: [] }]);
 
       onClose();
+      toast.success("Pasta criada com sucesso!");
     } catch (error) {
       console.log(error);
+      toast.error("Erro ao criar pasta!");
     } finally {
       setIsFetching(false);
     }

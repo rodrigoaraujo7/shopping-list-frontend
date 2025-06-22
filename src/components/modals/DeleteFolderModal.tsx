@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { useNavigate, useParams } from "react-router";
 
+import { toast } from "react-toastify";
+
 import { Button } from "../Button";
 import { Modal } from "../Modal";
 
@@ -36,8 +38,10 @@ export const DeleteFolderModal = ({ onClose }: { onClose: () => void }) => {
       );
 
       navigate("../");
+      toast.success("Pasta deletada com sucesso!");
     } catch (error) {
       console.log(error);
+      toast.success("Erro ao deletar pasta!");
     } finally {
       setIsFetching(false);
     }

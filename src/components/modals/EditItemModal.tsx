@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { useParams } from "react-router";
 
+import { toast } from "react-toastify";
+
 import { Button } from "../Button";
 import { Modal } from "../Modal";
 import { Input } from "../Input";
@@ -78,8 +80,10 @@ export const EditItemModal = ({
       );
 
       onClose();
+      toast.success("Item editado com sucesso!");
     } catch (error) {
       console.log(error);
+      toast.success("Erro ao editar item!");
     } finally {
       setIsFetching(false);
     }
