@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route } from "react-router";
 
 import { Flip, ToastContainer } from "react-toastify";
 
+import { AnimatePresence } from "motion/react";
+
 import { FolderProvider } from "./context/FolderContext.tsx";
 import { FolderPage } from "./pages/Folder.tsx";
 
@@ -15,15 +17,17 @@ import "./global.css";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <FolderProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<App />} />
+      <AnimatePresence mode="wait">
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<App />} />
 
-          <Route path="/folder/:folderId" element={<FolderPage />} />
+            <Route path="/folder/:folderId" element={<FolderPage />} />
 
-          <Route path="*" element={<h1>Página não encontrada</h1>} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<h1>Página não encontrada</h1>} />
+          </Routes>
+        </BrowserRouter>
+      </AnimatePresence>
 
       <ToastContainer
         position="top-right"

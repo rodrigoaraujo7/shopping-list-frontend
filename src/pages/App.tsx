@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, motion, type Variants } from "motion/react";
 
 import { useNavigate } from "react-router";
 
@@ -21,6 +21,38 @@ import { CgSpinner } from "react-icons/cg";
 import { normalizeText } from "../util/normalizeText";
 
 import type { Folder } from "../types/Folder";
+
+const listItemAnimation: Variants = {
+  hidden: {
+    x: 150,
+    opacity: 0,
+  },
+  visible: (index: number) => ({
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.1, delay: index * 0.05 },
+  }),
+};
+
+const filteredListItemAnimation: Variants = {
+  hidden: {
+    y: 30,
+  },
+  visible: (index: number) => ({
+    y: 0,
+    transition: { duration: 0.1, delay: index * 0.025 },
+  }),
+};
+
+const textListItemAnimation: Variants = {
+  hidden: {
+    filter: "blur(2px)",
+  },
+  visible: (index: number) => ({
+    filter: "blur(0px)",
+    transition: { delay: index * 0.1 },
+  }),
+};
 
 export const App = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
@@ -46,7 +78,11 @@ export const App = () => {
       ) : (
         <>
           {folders.length <= 0 ? (
-            <div className="flex justify-center items-center h-full">
+            <motion.div
+              className="flex justify-center items-center h-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
               <Card styles="outline" flex="center" style={{ width: "360px" }}>
                 <img src={noData} alt="no-data" width={300} />
 
@@ -64,7 +100,7 @@ export const App = () => {
                   Adicionar nova pasta
                 </Button>
               </Card>
-            </div>
+            </motion.div>
           ) : (
             <div className="h-full flex flex-col gap-4">
               <InputSearch
@@ -73,16 +109,20 @@ export const App = () => {
                 placeholder="Buscar pelo nome da pasta"
               />
 
-              <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
+              <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto overflow-x-hidden">
                 {searchFolderValue.length > 0 ? (
                   <React.Fragment>
                     {filteredFolders.length > 0 ? (
                       <React.Fragment>
-                        {filteredFolders.map((folder) => (
+                        {filteredFolders.map((folder, index) => (
                           <Card
                             key={folder.id}
                             className="cursor-pointer"
                             onClick={() => navigate(`/folder/${folder.id}`)}
+                            custom={index}
+                            variants={filteredListItemAnimation}
+                            initial="hidden"
+                            animate="visible"
                           >
                             <h1 className="font-bold text-lg text-gray-700">
                               {folder.title}
@@ -108,7 +148,11 @@ export const App = () => {
                         ))}
                       </React.Fragment>
                     ) : (
-                      <div className="flex justify-center items-center h-full">
+                      <motion.div
+                        className="flex justify-center items-center h-full"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
                         <Card
                           styles="outline"
                           flex="center"
@@ -125,34 +169,56 @@ export const App = () => {
                             </h2>
                           </div>
                         </Card>
-                      </div>
+                      </motion.div>
                     )}
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
-                    {folders.map((folder) => (
+                    {folders.map((folder, index) => (
                       <Card
                         key={folder.id}
                         className="cursor-pointer"
                         onClick={() => navigate(`/folder/${folder.id}`)}
+                        custom={index}
+                        variants={listItemAnimation}
+                        initial="hidden"
+                        animate="visible"
                       >
-                        <h1 className="font-bold text-lg text-gray-700">
+                        <motion.h1
+                          className="font-bold text-lg text-gray-700"
+                          custom={index}
+                          variants={textListItemAnimation}
+                          initial="hidden"
+                          animate="visible"
+                        >
                           {folder.title}
-                        </h1>
+                        </motion.h1>
 
                         {folder.description && (
-                          <h2 className="font-normal text-sm text-gray-500">
+                          <motion.h2
+                            className="font-normal text-sm text-gray-500"
+                            custom={index}
+                            variants={textListItemAnimation}
+                            initial="hidden"
+                            animate="visible"
+                          >
                             {folder.description}
-                          </h2>
+                          </motion.h2>
                         )}
 
-                        <div className="flex items-center gap-1">
+                        <motion.div
+                          className="flex items-center gap-1"
+                          custom={index}
+                          variants={textListItemAnimation}
+                          initial="hidden"
+                          animate="visible"
+                        >
                           <RxListBullet color="#667085" />
                           <span className="font-normal text-sm text-gray-500">
                             {folder.items.filter((item) => item.checked).length}
                             /{folder.items.length} itens completos
                           </span>
-                        </div>
+                        </motion.div>
                       </Card>
                     ))}
                   </React.Fragment>
