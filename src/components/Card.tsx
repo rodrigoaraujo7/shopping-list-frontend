@@ -1,6 +1,5 @@
 import type { ComponentProps } from "react";
 import { motion, type MotionProps } from "motion/react";
-
 import { tv, type VariantProps } from "tailwind-variants";
 
 const card = tv({

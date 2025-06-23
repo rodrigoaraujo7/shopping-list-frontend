@@ -28,7 +28,7 @@ export const EmptyContent = ({
       {...props}
     >
       <Card styles="outline" flex="center" style={{ width: "360px" }}>
-        <img src={image} alt="no-data" width={300} />
+        <img src={image} alt="no-data" width={300} loading="eager" />
 
         <div className="text-center">
           <h1 className="text-lg sm:text-xl font-semibold text-gray-900">

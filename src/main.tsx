@@ -7,8 +7,9 @@ import { Flip, ToastContainer } from "react-toastify";
 
 import { FolderProvider } from "./context/FolderContext.tsx";
 
+import { Router } from "./Router.tsx";
+
 import "./global.css";
-import { Router } from "./router.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

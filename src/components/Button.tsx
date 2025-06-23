@@ -1,5 +1,4 @@
 import { useEffect, useRef, type ComponentProps } from "react";
-
 import { AnimatePresence, motion } from "motion/react";
 import { CgSpinner } from "react-icons/cg";
 
