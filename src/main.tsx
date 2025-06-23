@@ -1,33 +1,21 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter } from "react-router";
 
 import { Flip, ToastContainer } from "react-toastify";
 
-import { AnimatePresence } from "motion/react";
-
 import { FolderProvider } from "./context/FolderContext.tsx";
-import { FolderPage } from "./pages/Folder.tsx";
-
-import { App } from "./pages/App.tsx";
 
 import "./global.css";
+import { Router } from "./router.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <FolderProvider>
-      <AnimatePresence mode="wait">
-        <BrowserRouter>
-          <Routes>
-            <Route index element={<App />} />
-
-            <Route path="/folder/:folderId" element={<FolderPage />} />
-
-            <Route path="*" element={<h1>Página não encontrada</h1>} />
-          </Routes>
-        </BrowserRouter>
-      </AnimatePresence>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
 
       <ToastContainer
         position="top-right"
