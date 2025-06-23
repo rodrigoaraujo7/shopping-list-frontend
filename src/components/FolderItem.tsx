@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, type ComponentProps } from "react";
 
 import { useParams } from "react-router";
 
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, type MotionProps } from "motion/react";
 
 import { Card } from "../components/Card";
 import { DeleteItemModal } from "./modals/DeleteItemModal";
@@ -16,11 +16,12 @@ import { api } from "../services/api";
 
 import type { Item } from "../types/Folder";
 
-type FolderItemProps = {
-  item: Item;
-};
+type FolderItemProps = ComponentProps<"div"> &
+  MotionProps & {
+    item: Item;
+  };
 
-export const FolderItem = ({ item }: FolderItemProps) => {
+export const FolderItem = ({ item, ...props }: FolderItemProps) => {
   const [selectedItem, setSelectedItem] = useState<Item>();
   const [editItemModal, setEditItemModal] = useState<boolean>(false);
   const [deleteItemModal, setDeleteItemModal] = useState<boolean>(false);
@@ -63,6 +64,7 @@ export const FolderItem = ({ item }: FolderItemProps) => {
         styles={item.checked ? "colored" : "soft"}
         key={item.id}
         data-checked={item.checked}
+        {...props}
       >
         <div className="flex gap-2 items-center justify-between w-full">
           <div className="flex items-center gap-2 relative w-[68%] md:w-[88%]">

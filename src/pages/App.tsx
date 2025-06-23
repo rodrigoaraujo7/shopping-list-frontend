@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { AnimatePresence, motion, type Variants } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 import { useNavigate } from "react-router";
 
@@ -11,6 +11,11 @@ import { Avatar } from "../components/Avatar";
 import { MainGrid } from "../components/MainGrid";
 import { InputSearch } from "../components/InputSearch";
 import { AddFolderModal } from "../components/modals/AddFolderModal";
+import { EmptyContent } from "../components/EmptyContent";
+
+import { filteredListItemAnimation } from "../animations/filteredListItemAnimation";
+import { listItemAnimation } from "../animations/listItemAnimation";
+import { blurTextListAnimation } from "../animations/blurTextAnimation";
 
 import noData from "../assets/svg/no-data.svg";
 import noFilterData from "../assets/svg/no-filterData.svg";
@@ -20,39 +25,6 @@ import { RxListBullet, RxPlus } from "react-icons/rx";
 import { normalizeText } from "../util/normalizeText";
 
 import type { Folder } from "../types/Folder";
-import { EmptyContent } from "../components/EmptyContent";
-
-const listItemAnimation: Variants = {
-  hidden: {
-    x: 150,
-    opacity: 0,
-  },
-  visible: (index: number) => ({
-    x: 0,
-    opacity: 1,
-    transition: { duration: 0.1, delay: index * 0.05 },
-  }),
-};
-
-const filteredListItemAnimation: Variants = {
-  hidden: {
-    y: 30,
-  },
-  visible: (index: number) => ({
-    y: 0,
-    transition: { duration: 0.1, delay: index * 0.025 },
-  }),
-};
-
-const textListItemAnimation: Variants = {
-  hidden: {
-    filter: "blur(2px)",
-  },
-  visible: (index: number) => ({
-    filter: "blur(0px)",
-    transition: { delay: index * 0.1 },
-  }),
-};
 
 export const App = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
@@ -147,7 +119,7 @@ export const App = () => {
                     <motion.h1
                       className="font-bold text-lg text-gray-700"
                       custom={index}
-                      variants={textListItemAnimation}
+                      variants={blurTextListAnimation}
                       initial="hidden"
                       animate="visible"
                     >
@@ -158,7 +130,7 @@ export const App = () => {
                       <motion.h2
                         className="font-normal text-sm text-gray-500"
                         custom={index}
-                        variants={textListItemAnimation}
+                        variants={blurTextListAnimation}
                         initial="hidden"
                         animate="visible"
                       >
@@ -169,7 +141,7 @@ export const App = () => {
                     <motion.div
                       className="flex items-center gap-1"
                       custom={index}
-                      variants={textListItemAnimation}
+                      variants={blurTextListAnimation}
                       initial="hidden"
                       animate="visible"
                     >
@@ -196,6 +168,8 @@ export const App = () => {
             padding: 16,
           }}
           onClick={() => setAddFolderModal(true)}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
         >
           <RxPlus color="#7f56d9" size={24} />
         </Avatar>

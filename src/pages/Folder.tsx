@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useNavigate, useParams } from "react-router";
 
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 import { MainGrid } from "../components/MainGrid";
 import { Avatar } from "../components/Avatar";
@@ -20,6 +20,9 @@ import { RxArrowLeft, RxListBullet, RxPencil1, RxTrash } from "react-icons/rx";
 import noFolderRoute from "../assets/svg/no-folder-route.svg";
 import noItems from "../assets/svg/no-items.svg";
 import noFilterData from "../assets/svg/no-filterData.svg";
+
+import { blurTextAnimation } from "../animations/blurTextAnimation";
+import { listItemAnimation } from "../animations/listItemAnimation";
 
 import { useFolderContext } from "../context/FolderContext";
 
@@ -66,35 +69,70 @@ export const FolderPage = () => {
       {folder ? (
         <div className="flex flex-col gap-4 h-full">
           <header className="flex justify-between gap-4">
-            <Avatar onClick={() => navigate("../")}>
+            <Avatar
+              onClick={() => navigate("../")}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0 }}
+            >
               <RxArrowLeft color="#7f56d9" size={16} strokeWidth=".75" />
             </Avatar>
 
             <div className="flex gap-4">
-              <Avatar onClick={() => handleModalChange("edit", true)}>
+              <Avatar
+                onClick={() => handleModalChange("edit", true)}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.15 }}
+              >
                 <RxPencil1 color="#7f56d9" size={16} strokeWidth=".75" />
               </Avatar>
-              <Avatar onClick={() => handleModalChange("delete", true)}>
+              <Avatar
+                onClick={() => handleModalChange("delete", true)}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3 }}
+              >
                 <RxTrash color="#7f56d9" size={16} strokeWidth=".75" />
               </Avatar>
             </div>
           </header>
 
-          <h1 className="font-bold text-2xl text-gray-700">{folder.title}</h1>
+          <motion.h1
+            className="font-bold text-2xl text-gray-700"
+            variants={blurTextAnimation}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.3 }}
+          >
+            {folder.title}
+          </motion.h1>
 
           {folder.description && (
-            <h2 className="font-medium text-sm text-gray-500">
+            <motion.h2
+              className="font-medium text-sm text-gray-500"
+              variants={blurTextAnimation}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: 0.4 }}
+            >
               {folder.description}
-            </h2>
+            </motion.h2>
           )}
 
-          <div className="flex items-center gap-1">
+          <motion.div
+            className="flex items-center gap-1"
+            variants={blurTextAnimation}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.5 }}
+          >
             <RxListBullet color="#667085" />
             <span className="font-normal text-sm text-gray-500">
               {folder.items.filter((item) => item.checked).length}/
               {folder.items.length} itens completos
             </span>
-          </div>
+          </motion.div>
 
           {folder.items.length > 0 && (
             <InputSearch
@@ -108,7 +146,7 @@ export const FolderPage = () => {
             <React.Fragment>
               {filteredItems.length > 0 ? (
                 <React.Fragment>
-                  <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
+                  <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto overflow-x-hidden">
                     {filteredItems.map((item) => (
                       <FolderItem item={item} key={item.id} />
                     ))}
@@ -130,9 +168,16 @@ export const FolderPage = () => {
             <React.Fragment>
               {folder.items.length >= 1 ? (
                 <React.Fragment>
-                  <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto">
-                    {folder.items.map((item) => (
-                      <FolderItem item={item} key={item.id} />
+                  <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto overflow-x-hidden">
+                    {folder.items.map((item, index) => (
+                      <FolderItem
+                        item={item}
+                        key={item.id}
+                        custom={index}
+                        variants={listItemAnimation}
+                        initial="hidden"
+                        animate="visible"
+                      />
                     ))}
                   </div>
 
