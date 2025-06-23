@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { LoadingPage } from "../components/LoadingPage";
 import { Card } from "../components/Card";
 import { useFolderContext } from "../context/FolderContext";
-import { Button } from "../components/Button";
 import { Avatar } from "../components/Avatar";
 import { MainGrid } from "../components/MainGrid";
 import { InputSearch } from "../components/InputSearch";
@@ -21,6 +20,7 @@ import { RxListBullet, RxPlus } from "react-icons/rx";
 import { normalizeText } from "../util/normalizeText";
 
 import type { Folder } from "../types/Folder";
+import { EmptyContent } from "../components/EmptyContent";
 
 const listItemAnimation: Variants = {
   hidden: {
@@ -74,29 +74,13 @@ export const App = () => {
   return (
     <MainGrid>
       {folders.length <= 0 ? (
-        <motion.div
-          className="flex justify-center items-center h-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <Card styles="outline" flex="center" style={{ width: "360px" }}>
-            <img src={noData} alt="no-data" width={300} />
-
-            <div className="text-center">
-              <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
-                Comece criando uma pasta
-              </h1>
-              <h2 className="text-sm font-medium text-gray-500">
-                Sua lista de compras inteligente será exibida aqui. Comece
-                criando uma nova pasta
-              </h2>
-            </div>
-
-            <Button onClick={() => setAddFolderModal(true)}>
-              Adicionar nova pasta
-            </Button>
-          </Card>
-        </motion.div>
+        <EmptyContent
+          image={noData}
+          title="Comece criando uma pasta"
+          subTitle="Sua lista de compras inteligente será exibida aqui. Comece criando uma nova pasta"
+          buttonContent="Adicionar nova pasta"
+          onClick={() => setAddFolderModal(true)}
+        />
       ) : (
         <div className="h-full flex flex-col gap-4">
           <InputSearch
@@ -141,28 +125,11 @@ export const App = () => {
                     ))}
                   </React.Fragment>
                 ) : (
-                  <motion.div
-                    className="flex justify-center items-center h-full"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                  >
-                    <Card
-                      styles="outline"
-                      flex="center"
-                      style={{ width: "360px" }}
-                    >
-                      <img src={noFilterData} alt="no-data" width={300} />
-
-                      <div className="text-center">
-                        <h1 className="text-lg sm:text-xl font-semibold text-gray-900">
-                          Pasta não encontrada
-                        </h1>
-                        <h2 className="text-sm font-medium text-gray-500">
-                          A pasta que você está buscando não existe
-                        </h2>
-                      </div>
-                    </Card>
-                  </motion.div>
+                  <EmptyContent
+                    image={noFilterData}
+                    title="Pasta não encontrada"
+                    subTitle="A pasta que você está buscando não existe"
+                  />
                 )}
               </React.Fragment>
             ) : (
