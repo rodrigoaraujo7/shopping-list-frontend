@@ -99,7 +99,7 @@ export const ListPage = () => {
                       <Card
                         key={folder.id}
                         className="cursor-pointer"
-                        onClick={() => navigate(`/folder/${folder.id}`)}
+                        onClick={() => navigate(`./${folder.id}`)}
                         custom={index}
                         variants={filteredListItemAnimation}
                         initial="hidden"
@@ -139,7 +139,7 @@ export const ListPage = () => {
                   <Card
                     key={folder.id}
                     className="cursor-pointer"
-                    onClick={() => navigate(`/folder/${folder.id}`)}
+                    onClick={() => navigate(`./${folder.id}`)}
                     custom={index}
                     variants={listItemAnimation}
                     initial="hidden"

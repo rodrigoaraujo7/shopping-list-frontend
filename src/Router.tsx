@@ -17,7 +17,7 @@ export const Router = () => {
 
         <Route path="/:listId" element={<ListPage />} />
 
-        <Route path="/folder/:folderId" element={<FolderPage />} />
+        <Route path="/:listId/:folderId" element={<FolderPage />} />
 
         <Route path="*" element={<h1>Página não encontrada</h1>} />
       </Routes>
