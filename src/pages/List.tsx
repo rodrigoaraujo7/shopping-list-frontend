@@ -26,7 +26,7 @@ import { normalizeText } from "../util/normalizeText";
 
 import { api } from "../services/api";
 
-import type { Folder } from "../types/Folder";
+import type { Folder } from "../types/List";
 
 export const ListPage = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);

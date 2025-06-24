@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-import type { Folder } from "../types/Folder";
+import type { Folder } from "../types/List";
 
 interface FolderContextProps {
   listId: string;

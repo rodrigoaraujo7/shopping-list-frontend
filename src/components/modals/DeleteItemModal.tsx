@@ -13,7 +13,7 @@ import { useFolderContext } from "../../context/FolderContext";
 
 import { api } from "../../services/api";
 
-import type { Item } from "../../types/Folder";
+import type { Item } from "../../types/List";
 
 export const DeleteItemModal = ({
   onClose,
