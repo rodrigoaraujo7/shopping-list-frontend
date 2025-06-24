@@ -24,7 +24,7 @@ import noFilterData from "../assets/svg/no-filterData.svg";
 import { blurTextAnimation } from "../animations/blurTextAnimation";
 import { listItemAnimation } from "../animations/listItemAnimation";
 
-import { useFolderContext } from "../context/FolderContext";
+import { useListContext } from "../context/ListContext";
 
 import { normalizeText } from "../util/normalizeText";
 
@@ -42,7 +42,7 @@ export const FolderPage = () => {
   });
   const [searchItemValue, setSearchItemValue] = useState<string>("");
 
-  const { listId, folders, loading } = useFolderContext();
+  const { listId, folders, loading } = useListContext();
   const { folderId } = useParams();
 
   const folder: Folder | undefined = folders.find(

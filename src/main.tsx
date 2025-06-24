@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router";
 
 import { Flip, ToastContainer } from "react-toastify";
 
-import { FolderProvider } from "./context/FolderContext.tsx";
+import { FolderProvider } from "./context/ListContext.tsx";
 
 import { Router } from "./Router.tsx";
 

@@ -9,14 +9,14 @@ import { Modal } from "../Modal";
 
 import deleteFolder from "../../assets/svg/delete-folder.svg";
 
-import { useFolderContext } from "../../context/FolderContext";
+import { useListContext } from "../../context/ListContext";
 
 import { api } from "../../services/api";
 
 export const DeleteFolderModal = ({ onClose }: { onClose: () => void }) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { listId, setFolders } = useFolderContext();
+  const { listId, setFolders } = useListContext();
 
   const navigate = useNavigate();
   const { folderId } = useParams();

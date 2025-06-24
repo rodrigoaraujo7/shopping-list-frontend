@@ -10,7 +10,7 @@ import { EditItemModal } from "./modals/EditItemModal";
 
 import { RxExternalLink, RxPencil1, RxTrash } from "react-icons/rx";
 
-import { useFolderContext } from "../context/FolderContext";
+import { useListContext } from "../context/ListContext";
 
 import { api } from "../services/api";
 
@@ -26,7 +26,7 @@ export const FolderItem = ({ item, ...props }: FolderItemProps) => {
   const [editItemModal, setEditItemModal] = useState<boolean>(false);
   const [deleteItemModal, setDeleteItemModal] = useState<boolean>(false);
 
-  const { setFolders } = useFolderContext();
+  const { setFolders } = useListContext();
 
   const { folderId } = useParams();
 

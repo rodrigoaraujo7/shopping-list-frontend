@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router";
 
 import { LoadingPage } from "../components/LoadingPage";
 import { Card } from "../components/Card";
-import { useFolderContext } from "../context/FolderContext";
+import { useListContext } from "../context/ListContext";
 import { Avatar } from "../components/Avatar";
 import { MainGrid } from "../components/MainGrid";
 import { InputSearch } from "../components/InputSearch";
@@ -33,7 +33,7 @@ export const ListPage = () => {
   const [searchFolderValue, setSearchFolderValue] = useState<string>("");
 
   const { setListId, folders, setFolders, loading, setLoading } =
-    useFolderContext();
+    useListContext();
 
   const { listId } = useParams();
 
