@@ -42,7 +42,7 @@ export const FolderPage = () => {
   });
   const [searchItemValue, setSearchItemValue] = useState<string>("");
 
-  const { folders, loading } = useFolderContext();
+  const { listId, folders, loading } = useFolderContext();
   const { folderId } = useParams();
 
   const folder: Folder | undefined = folders.find(
@@ -70,7 +70,7 @@ export const FolderPage = () => {
         <div className="flex flex-col gap-4 h-full">
           <header className="flex justify-between gap-4">
             <Avatar
-              onClick={() => navigate("../")}
+              onClick={() => navigate(`../${listId}`)}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0 }}

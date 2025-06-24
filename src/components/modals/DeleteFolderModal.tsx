@@ -16,7 +16,7 @@ import { api } from "../../services/api";
 export const DeleteFolderModal = ({ onClose }: { onClose: () => void }) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { setFolders } = useFolderContext();
+  const { listId, setFolders } = useFolderContext();
 
   const navigate = useNavigate();
   const { folderId } = useParams();
@@ -37,7 +37,7 @@ export const DeleteFolderModal = ({ onClose }: { onClose: () => void }) => {
         prevFolders.filter((pv) => pv.id !== folderId)
       );
 
-      navigate("../");
+      navigate(`../${listId}`);
       toast.success("Pasta deletada com sucesso!");
     } catch (error) {
       console.log(error);

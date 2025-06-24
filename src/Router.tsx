@@ -3,7 +3,7 @@ import { useLocation, Routes, Route } from "react-router";
 import { AnimatePresence } from "motion/react";
 
 import { FolderPage } from "./pages/Folder.tsx";
-import { App } from "./pages/App.tsx";
+import { ListPage } from "./pages/List.tsx";
 
 import "./global.css";
 
@@ -13,7 +13,9 @@ export const Router = () => {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route index element={<App />} />
+        <Route index element={<h1>Index</h1>} />
+
+        <Route path="/:listId" element={<ListPage />} />
 
         <Route path="/folder/:folderId" element={<FolderPage />} />
 

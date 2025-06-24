@@ -1,49 +1,32 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
-
-import { api } from "../services/api";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 import type { Folder } from "../types/Folder";
 
 interface FolderContextProps {
+  listId: string;
+  setListId: React.Dispatch<React.SetStateAction<string>>;
   folders: Folder[];
   setFolders: React.Dispatch<React.SetStateAction<Folder[]>>;
   loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FolderContext = createContext<FolderContextProps | undefined>(undefined);
 
 export const FolderProvider = ({ children }: { children: ReactNode }) => {
+  const [listId, setListId] = useState<string>("");
   const [folders, setFolders] = useState<Folder[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const fetchFolders = async () => {
-    try {
-      const { data } = await api.get("/folders");
-
-      setFolders(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchFolders();
-  }, []);
 
   return (
     <FolderContext.Provider
       value={{
+        listId,
+        setListId,
         folders,
         setFolders,
         loading,
+        setLoading,
       }}
     >
       {children}

@@ -20,7 +20,7 @@ import { api } from "../../services/api";
 export const AddFolderModal = ({ onClose }: { onClose: () => void }) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { setFolders } = useFolderContext();
+  const { listId, setFolders } = useFolderContext();
 
   const {
     register,
@@ -39,6 +39,7 @@ export const AddFolderModal = ({ onClose }: { onClose: () => void }) => {
       const response = await api.post("/folder", {
         title: data.title,
         description: data.description,
+        listId,
       });
 
       setFolders((folder) => [...folder, { ...response.data, items: [] }]);

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { AnimatePresence, motion } from "motion/react";
 
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { LoadingPage } from "../components/LoadingPage";
 import { Card } from "../components/Card";
@@ -24,13 +24,42 @@ import { RxListBullet, RxPlus } from "react-icons/rx";
 
 import { normalizeText } from "../util/normalizeText";
 
+import { api } from "../services/api";
+
 import type { Folder } from "../types/Folder";
 
-export const App = () => {
+export const ListPage = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
   const [searchFolderValue, setSearchFolderValue] = useState<string>("");
 
-  const { folders, loading } = useFolderContext();
+  const { setListId, folders, setFolders, loading, setLoading } =
+    useFolderContext();
+
+  const { listId } = useParams();
+
+  const fetchFolders = async () => {
+    if (!listId) return;
+
+    setListId(listId);
+
+    try {
+      const { data } = await api.get("/folders", {
+        params: {
+          listId,
+        },
+      });
+
+      setFolders(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchFolders();
+  }, []);
 
   const filteredFolders: Folder[] =
     searchFolderValue.length > 0
