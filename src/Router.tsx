@@ -1,11 +1,17 @@
-import { useLocation, Routes, Route } from "react-router";
+import { useLocation, Routes, Route, Outlet } from "react-router";
 
 import { AnimatePresence } from "motion/react";
+
+import { FolderProvider } from "./context/FolderContext.tsx";
 
 import { FolderPage } from "./pages/Folder.tsx";
 import { ListPage } from "./pages/List.tsx";
 
-import "./global.css";
+const FolderLayout = () => (
+  <FolderProvider>
+    <Outlet />
+  </FolderProvider>
+);
 
 export const Router = () => {
   const location = useLocation();
@@ -15,9 +21,11 @@ export const Router = () => {
       <Routes location={location} key={location.pathname}>
         <Route index element={<h1>Index</h1>} />
 
-        <Route path="/:listId" element={<ListPage />} />
+        <Route path="/:listId" element={<FolderLayout />}>
+          <Route index element={<ListPage />} />
 
-        <Route path="/:listId/:folderId" element={<FolderPage />} />
+          <Route path="/:listId/:folderId" element={<FolderPage />} />
+        </Route>
 
         <Route path="*" element={<h1>Página não encontrada</h1>} />
       </Routes>

@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router";
 
 import { Flip, ToastContainer } from "react-toastify";
 
-import { FolderProvider } from "./context/ListContext.tsx";
+import { ListProvider } from "./context/ListContext.tsx";
 
 import { Router } from "./Router.tsx";
 
@@ -13,7 +13,7 @@ import "./global.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <FolderProvider>
+    <ListProvider>
       <BrowserRouter>
         <Router />
       </BrowserRouter>
@@ -31,6 +31,6 @@ createRoot(document.getElementById("root")!).render(
         theme="light"
         transition={Flip}
       />
-    </FolderProvider>
+    </ListProvider>
   </StrictMode>
 );

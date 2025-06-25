@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { AnimatePresence, motion } from "motion/react";
 
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 import { LoadingPage } from "../components/LoadingPage";
 import { Card } from "../components/Card";
-import { useListContext } from "../context/ListContext";
 import { Avatar } from "../components/Avatar";
 import { MainGrid } from "../components/MainGrid";
 import { InputSearch } from "../components/InputSearch";
@@ -24,42 +23,16 @@ import { RxListBullet, RxPlus } from "react-icons/rx";
 
 import { normalizeText } from "../util/normalizeText";
 
-import { api } from "../services/api";
-
 import type { Folder } from "../types/List";
+import { useFolderContext } from "../context/FolderContext";
 
 export const ListPage = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
   const [searchFolderValue, setSearchFolderValue] = useState<string>("");
 
-  const { setListId, folders, setFolders, loading, setLoading } =
-    useListContext();
+  const { folders, loading } = useFolderContext();
 
-  const { listId } = useParams();
-
-  const fetchFolders = async () => {
-    if (!listId) return;
-
-    setListId(listId);
-
-    try {
-      const { data } = await api.get("/folders", {
-        params: {
-          listId,
-        },
-      });
-
-      setFolders(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchFolders();
-  }, []);
+  const navigate = useNavigate();
 
   const filteredFolders: Folder[] =
     searchFolderValue.length > 0
@@ -67,8 +40,6 @@ export const ListPage = () => {
           normalizeText(folder.title).includes(normalizeText(searchFolderValue))
         )
       : [];
-
-  const navigate = useNavigate();
 
   if (loading) return <LoadingPage />;
 

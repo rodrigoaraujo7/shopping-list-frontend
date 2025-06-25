@@ -24,11 +24,10 @@ import noFilterData from "../assets/svg/no-filterData.svg";
 import { blurTextAnimation } from "../animations/blurTextAnimation";
 import { listItemAnimation } from "../animations/listItemAnimation";
 
-import { useListContext } from "../context/ListContext";
-
 import { normalizeText } from "../util/normalizeText";
 
 import type { Folder, Item } from "../types/List";
+import { useFolderContext } from "../context/FolderContext";
 
 export const FolderPage = () => {
   const [modal, setModal] = useState<{
@@ -42,7 +41,8 @@ export const FolderPage = () => {
   });
   const [searchItemValue, setSearchItemValue] = useState<string>("");
 
-  const { listId, folders, loading } = useListContext();
+  const { listId, folders, loading } = useFolderContext();
+
   const { folderId } = useParams();
 
   const folder: Folder | undefined = folders.find(
@@ -70,7 +70,7 @@ export const FolderPage = () => {
         <div className="flex flex-col gap-4 h-full">
           <header className="flex justify-between gap-4">
             <Avatar
-              onClick={() => navigate(`../${listId}`)}
+              onClick={() => navigate(`/${listId}`)}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0 }}

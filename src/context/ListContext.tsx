@@ -6,29 +6,26 @@ import {
   type ReactNode,
 } from "react";
 
-import type { Folder, List } from "../types/List";
 import { api } from "../services/api";
 
+import type { List } from "../types/List";
+
 interface ListContextProps {
-  avaliableListIds: string[];
-  setAvaliableListIds: React.Dispatch<React.SetStateAction<string[]>>;
-  listId: string;
-  setListId: React.Dispatch<React.SetStateAction<string>>;
-  folders: Folder[];
-  setFolders: React.Dispatch<React.SetStateAction<Folder[]>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  avaliableListIds: string[];
+  setAvaliableListIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const ListContext = createContext<ListContextProps | undefined>(undefined);
 
-export const FolderProvider = ({ children }: { children: ReactNode }) => {
+export const ListProvider = ({ children }: { children: ReactNode }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [avaliableListIds, setAvaliableListIds] = useState<string[]>([]);
-  const [listId, setListId] = useState<string>("");
-  const [folders, setFolders] = useState<Folder[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchList = async () => {
+    setLoading(true);
+
     try {
       const { data } = await api.get<List[]>("/lists");
 
@@ -42,7 +39,6 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchList();
-    console.log(avaliableListIds);
   }, []);
 
   return (
@@ -50,10 +46,6 @@ export const FolderProvider = ({ children }: { children: ReactNode }) => {
       value={{
         avaliableListIds,
         setAvaliableListIds,
-        listId,
-        setListId,
-        folders,
-        setFolders,
         loading,
         setLoading,
       }}
