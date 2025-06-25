@@ -19,7 +19,7 @@ import { blurTextListAnimation } from "../animations/blurTextAnimation";
 import noData from "../assets/svg/no-data.svg";
 import noFilterData from "../assets/svg/no-filterData.svg";
 
-import { RxListBullet, RxPlus } from "react-icons/rx";
+import { RxArrowLeft, RxListBullet, RxPlus } from "react-icons/rx";
 
 import { normalizeText } from "../util/normalizeText";
 
@@ -56,11 +56,23 @@ export const ListPage = () => {
         />
       ) : (
         <div className="h-full flex flex-col gap-4">
-          <InputSearch
-            state={searchFolderValue}
-            setState={setSearchFolderValue}
-            placeholder="Buscar pelo nome da pasta"
-          />
+          <div className="flex gap-2 items-center">
+            <Avatar
+              onClick={() => navigate(`../`)}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0 }}
+              style={{ padding: 12 }}
+            >
+              <RxArrowLeft color="#7f56d9" size={16} strokeWidth=".75" />
+            </Avatar>
+
+            <InputSearch
+              state={searchFolderValue}
+              setState={setSearchFolderValue}
+              placeholder="Buscar pelo nome da pasta"
+            />
+          </div>
 
           <div className="flex flex-col gap-3 flex-[1] pr-1 overflow-auto overflow-x-hidden">
             {searchFolderValue.length > 0 ? (

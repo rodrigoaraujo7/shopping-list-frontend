@@ -9,14 +9,14 @@ import { Modal } from "../Modal";
 
 import deleteFolder from "../../assets/svg/delete-folder.svg";
 
-import { useListContext } from "../../context/ListContext";
+import { useFolderContext } from "../../context/FolderContext";
 
 import { api } from "../../services/api";
 
 export const DeleteFolderModal = ({ onClose }: { onClose: () => void }) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { listId, setFolders } = useListContext();
+  const { listId, setFolders } = useFolderContext();
 
   const navigate = useNavigate();
   const { folderId } = useParams();
@@ -37,7 +37,7 @@ export const DeleteFolderModal = ({ onClose }: { onClose: () => void }) => {
         prevFolders.filter((pv) => pv.id !== folderId)
       );
 
-      navigate(`../${listId}`);
+      navigate(`/${listId}`);
       toast.success("Pasta deletada com sucesso!");
     } catch (error) {
       console.log(error);

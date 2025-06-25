@@ -13,14 +13,14 @@ import {
   AddFolderFormSchema,
 } from "../../types/zod/add-folder-form";
 
-import { useListContext } from "../../context/ListContext";
+import { useFolderContext } from "../../context/FolderContext";
 
 import { api } from "../../services/api";
 
 export const AddFolderModal = ({ onClose }: { onClose: () => void }) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { listId, setFolders } = useListContext();
+  const { listId, setFolders } = useFolderContext();
 
   const {
     register,

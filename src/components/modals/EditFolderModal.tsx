@@ -13,7 +13,7 @@ import {
 } from "../../types/zod/add-folder-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useListContext } from "../../context/ListContext";
+import { useFolderContext } from "../../context/FolderContext";
 
 import { api } from "../../services/api";
 
@@ -28,7 +28,7 @@ export const EditFolderModal = ({
 }) => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const { setFolders } = useListContext();
+  const { setFolders } = useFolderContext();
 
   const {
     register,
