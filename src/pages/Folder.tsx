@@ -26,8 +26,9 @@ import { listItemAnimation } from "../animations/listItemAnimation";
 
 import { normalizeText } from "../util/normalizeText";
 
-import type { Folder, Item } from "../types/List";
 import { useFolderContext } from "../context/FolderContext";
+
+import type { Folder, Item } from "../types/List";
 
 export const FolderPage = () => {
   const [modal, setModal] = useState<{

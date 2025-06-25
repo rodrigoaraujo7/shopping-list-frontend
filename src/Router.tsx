@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 
 import { FolderProvider } from "./context/FolderContext.tsx";
 
+import { App } from "./pages/App.tsx";
 import { FolderPage } from "./pages/Folder.tsx";
 import { ListPage } from "./pages/List.tsx";
 
@@ -19,7 +20,7 @@ export const Router = () => {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route index element={<h1>Index</h1>} />
+        <Route index element={<App />} />
 
         <Route path="/:listId" element={<FolderLayout />}>
           <Route index element={<ListPage />} />

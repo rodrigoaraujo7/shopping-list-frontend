@@ -23,8 +23,9 @@ import { RxListBullet, RxPlus } from "react-icons/rx";
 
 import { normalizeText } from "../util/normalizeText";
 
-import type { Folder } from "../types/List";
 import { useFolderContext } from "../context/FolderContext";
+
+import type { Folder } from "../types/List";
 
 export const ListPage = () => {
   const [addFolderModal, setAddFolderModal] = useState<boolean>(false);
