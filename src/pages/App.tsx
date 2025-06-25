@@ -34,6 +34,7 @@ export const App = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<AddListFormData>({
     resolver: zodResolver(AddListFormSchema),
   });
@@ -84,6 +85,10 @@ export const App = () => {
               placeholder="Exemplo: minha-lista"
               {...register("id")}
               styles={errors.id && "error"}
+              onChange={(e) => {
+                const cleaned = e.target.value.toLowerCase().replace(/\s/g, "");
+                setValue("id", cleaned);
+              }}
             />
 
             <Button isFetching={isFetching}>Criar ou acessar lista</Button>
