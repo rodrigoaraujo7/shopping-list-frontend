@@ -5,6 +5,9 @@ import { MainGrid } from "../components/MainGrid";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 
+import { motion } from "motion/react";
+import { blurTextAnimation } from "../animations/blurTextAnimation";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -60,7 +63,13 @@ export const App = () => {
 
   return (
     <MainGrid>
-      <div className="flex justify-center items-center h-full">
+      <motion.div
+        className="flex justify-center items-center h-full"
+        variants={blurTextAnimation}
+        initial="hidden"
+        animate="visible"
+        transition={{ delay: 0.5, duration: 0.5 }}
+      >
         <Card styles="outline" flex="center" style={{ width: "460px" }}>
           <img src={"/logo.png"} alt="tanalista-logo" width={300} />
 
@@ -79,7 +88,7 @@ export const App = () => {
             <Button isFetching={isFetching}>Criar ou acessar lista</Button>
           </form>
         </Card>
-      </div>
+      </motion.div>
     </MainGrid>
   );
 };
